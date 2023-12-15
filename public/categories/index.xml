@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Categories on Dicking with Docker</title>
+    <link>https://dickingwithdocker.com/categories/</link>
+    <description>Recent content in Categories on Dicking with Docker</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sat, 18 Dec 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://dickingwithdocker.com/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>containers</title>
+      <link>https://dickingwithdocker.com/categories/containers/</link>
+      <pubDate>Sat, 18 Dec 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/categories/containers/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>kubernetes</title>
+      <link>https://dickingwithdocker.com/categories/kubernetes/</link>
+      <pubDate>Sat, 18 Dec 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/categories/kubernetes/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>networking</title>
+      <link>https://dickingwithdocker.com/categories/networking/</link>
+      <pubDate>Sat, 18 Dec 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/categories/networking/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>consul</title>
+      <link>https://dickingwithdocker.com/categories/consul/</link>
+      <pubDate>Thu, 09 Sep 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/categories/consul/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>deployment</title>
+      <link>https://dickingwithdocker.com/categories/deployment/</link>
+      <pubDate>Thu, 09 Sep 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/categories/deployment/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>hashicorp</title>
+      <link>https://dickingwithdocker.com/categories/hashicorp/</link>
+      <pubDate>Thu, 09 Sep 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/categories/hashicorp/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>linux</title>
+      <link>https://dickingwithdocker.com/categories/linux/</link>
+      <pubDate>Thu, 09 Sep 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/categories/linux/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>provisioning</title>
+      <link>https://dickingwithdocker.com/categories/provisioning/</link>
+      <pubDate>Thu, 09 Sep 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/categories/provisioning/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>security</title>
+      <link>https://dickingwithdocker.com/categories/security/</link>
+      <pubDate>Thu, 09 Sep 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/categories/security/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>terraform</title>
+      <link>https://dickingwithdocker.com/categories/terraform/</link>
+      <pubDate>Thu, 09 Sep 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/categories/terraform/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>uncategorised</title>
+      <link>https://dickingwithdocker.com/categories/uncategorised/</link>
+      <pubDate>Mon, 31 May 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/categories/uncategorised/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>ssh</title>
+      <link>https://dickingwithdocker.com/categories/ssh/</link>
+      <pubDate>Sat, 30 May 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/categories/ssh/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>docker</title>
+      <link>https://dickingwithdocker.com/categories/docker/</link>
+      <pubDate>Mon, 11 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/categories/docker/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>metrics</title>
+      <link>https://dickingwithdocker.com/categories/metrics/</link>
+      <pubDate>Mon, 11 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/categories/metrics/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>observability</title>
+      <link>https://dickingwithdocker.com/categories/observability/</link>
+      <pubDate>Mon, 11 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/categories/observability/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>prometheus</title>
+      <link>https://dickingwithdocker.com/categories/prometheus/</link>
+      <pubDate>Mon, 11 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/categories/prometheus/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>thanos</title>
+      <link>https://dickingwithdocker.com/categories/thanos/</link>
+      <pubDate>Mon, 11 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/categories/thanos/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>ansible</title>
+      <link>https://dickingwithdocker.com/categories/ansible/</link>
+      <pubDate>Tue, 07 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/categories/ansible/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>automation</title>
+      <link>https://dickingwithdocker.com/categories/automation/</link>
+      <pubDate>Tue, 07 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/categories/automation/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>letsencrypt</title>
+      <link>https://dickingwithdocker.com/categories/letsencrypt/</link>
+      <pubDate>Tue, 07 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/categories/letsencrypt/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>programming</title>
+      <link>https://dickingwithdocker.com/categories/programming/</link>
+      <pubDate>Wed, 27 Jun 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/categories/programming/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>python</title>
+      <link>https://dickingwithdocker.com/categories/python/</link>
+      <pubDate>Wed, 27 Jun 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/categories/python/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>orchestration</title>
+      <link>https://dickingwithdocker.com/categories/orchestration/</link>
+      <pubDate>Sun, 18 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/categories/orchestration/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>packer</title>
+      <link>https://dickingwithdocker.com/categories/packer/</link>
+      <pubDate>Sun, 18 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/categories/packer/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

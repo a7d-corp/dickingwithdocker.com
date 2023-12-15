@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>uncategorised on Dicking with Docker</title>
+    <link>https://dickingwithdocker.com/categories/uncategorised/</link>
+    <description>Recent content in uncategorised on Dicking with Docker</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Mon, 31 May 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://dickingwithdocker.com/categories/uncategorised/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Using BGP to integrate Cilium with OPNsense</title>
+      <link>https://dickingwithdocker.com/posts/using-bgp-to-integrate-cilium-with-opnsense/</link>
+      <pubDate>Mon, 31 May 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/posts/using-bgp-to-integrate-cilium-with-opnsense/</guid>
+      <description>If (like me) you happen to follow the development of the Cilium CNI plugin for Kubernetes then you&amp;rsquo;ll have seen the recent 1.10 release which included many shiny features. One exciting addition is the ability to announce Service IPs via BGP.
+Running Kubernetes in a homelab environment quickly highlights that there are some aspects which are a little lacking when compared to the integration you get from the cloud provider offerings.</description>
+    </item>
+    
+  </channel>
+</rss>

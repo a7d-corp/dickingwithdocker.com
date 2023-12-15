@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>networking on Dicking with Docker</title>
+    <link>https://dickingwithdocker.com/categories/networking/</link>
+    <description>Recent content in networking on Dicking with Docker</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sat, 18 Dec 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://dickingwithdocker.com/categories/networking/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Troubleshooting Network Traffic with CRI-O and Kubernetes</title>
+      <link>https://dickingwithdocker.com/posts/troubleshooting-network-traffic-with-cri-o-and-kubernetes/</link>
+      <pubDate>Sat, 18 Dec 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/posts/troubleshooting-network-traffic-with-cri-o-and-kubernetes/</guid>
+      <description>Running immutable infra is the holy grail for many people, however there are times when you&amp;rsquo;ll need to get down in the weeds in order to troubleshoot issues. Let&amp;rsquo;s imagine a scenario; you need to verify that a pod is receiving traffic, but the image is built FROM scratch. As scratch containers are as minimal as possible, there&amp;rsquo;s no shell in the image, so there&amp;rsquo;s no way you can exec into it and hope to do anything remotely useful.</description>
+    </item>
+    
+  </channel>
+</rss>

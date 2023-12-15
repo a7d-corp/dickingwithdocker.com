@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>containers on Dicking with Docker</title>
+    <link>https://dickingwithdocker.com/categories/containers/</link>
+    <description>Recent content in containers on Dicking with Docker</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sat, 18 Dec 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://dickingwithdocker.com/categories/containers/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Troubleshooting Network Traffic with CRI-O and Kubernetes</title>
+      <link>https://dickingwithdocker.com/posts/troubleshooting-network-traffic-with-cri-o-and-kubernetes/</link>
+      <pubDate>Sat, 18 Dec 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/posts/troubleshooting-network-traffic-with-cri-o-and-kubernetes/</guid>
+      <description>Running immutable infra is the holy grail for many people, however there are times when you&amp;rsquo;ll need to get down in the weeds in order to troubleshoot issues. Let&amp;rsquo;s imagine a scenario; you need to verify that a pod is receiving traffic, but the image is built FROM scratch. As scratch containers are as minimal as possible, there&amp;rsquo;s no shell in the image, so there&amp;rsquo;s no way you can exec into it and hope to do anything remotely useful.</description>
+    </item>
+    
+    <item>
+      <title>Thanos and Prometheus without Kubernetes</title>
+      <link>https://dickingwithdocker.com/posts/thanos-prometheus-without-kubernetes/</link>
+      <pubDate>Mon, 11 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/posts/thanos-prometheus-without-kubernetes/</guid>
+      <description>Running Thanos without Kubernetes If you&amp;rsquo;ve been around the cloud-native world for a while, you&amp;rsquo;ll no doubt be familiar with (and quite likely already be using) Prometheus. You may however not have heard of Thanos. Put simply, Thanos takes Prometheus and makes it even more awesome.
+In their own words, the high-level description of Thanos is the following:
+Thanos is a set of components that can be composed into a highly available metric system with unlimited storage capacity, which can be added seamlessly on top of existing Prometheus deployments.</description>
+    </item>
+    
+    <item>
+      <title>Deploying Kubernetes on VMs with Kubespray</title>
+      <link>https://dickingwithdocker.com/posts/deploying-kubernetes-vms-kubespray/</link>
+      <pubDate>Wed, 09 Aug 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/posts/deploying-kubernetes-vms-kubespray/</guid>
+      <description>All the choices So you&amp;rsquo;re looking to start using Kubernetes, but you&amp;rsquo;re overwhelmed by the multitude of deployment options available? Judging by the length of the Picking the Right Solution section to the Kubernetes docs, it&amp;rsquo;s safe to assume that you&amp;rsquo;re not alone. Even after you&amp;rsquo;ve made it past the provisioning stage, you then need to learn how to administrate what is a very complex system. In short; Kubernetes is not easy.</description>
+    </item>
+    
+    <item>
+      <title>Forcing Kubernetes to use a secondary interface</title>
+      <link>https://dickingwithdocker.com/posts/forcing-kubernetes-to-use-a-secondary-interface/</link>
+      <pubDate>Sun, 20 Nov 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/posts/forcing-kubernetes-to-use-a-secondary-interface/</guid>
+      <description>Following on from my previous post, I discovered rather to my dismay that although I had my nodes initially communicating over the secondary interface, the weave services (and thus my inter-pod traffic) was all going over the public interface.
+As these are VPSes, they have a public IP on eth0 and a VLAN IP on eth1, so it makes sense for all inter-pod traffic to stay internal. If I check the logs for one of the weave-net containers, we can see all comms are going via the 1.</description>
+    </item>
+    
+    <item>
+      <title>Deploying Kubernetes 1.4 on Ubuntu Xenial with Kubeadm</title>
+      <link>https://dickingwithdocker.com/posts/deploying-kubernetes-1-4-on-ubuntu-xenial-with-kubeadm/</link>
+      <pubDate>Thu, 17 Nov 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/posts/deploying-kubernetes-1-4-on-ubuntu-xenial-with-kubeadm/</guid>
+      <description>With the 1.4 release of Kubernetes, Google have made instantiating a cluster a whole lot easier. Using Kubeadm, you can bring up a cluster with a single command on each node. A further command will create a DaemonSet which brings up a Weave mesh network between all your nodes.
+As always with complex systems such as Kubernetes, there are some potential pitfalls to be aware of. Firstly, the getting started guide notes that v1.</description>
+    </item>
+    
+  </channel>
+</rss>

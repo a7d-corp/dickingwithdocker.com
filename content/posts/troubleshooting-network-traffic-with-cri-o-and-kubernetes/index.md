@@ -1,0 +1,72 @@
+---
+title: "Troubleshooting Network Traffic with CRI-O and Kubernetes"
+date: "2021-12-18"
+categories: 
+  - "containers"
+  - "kubernetes"
+  - "networking"
+---
+
+Running immutable infra is the holy grail for many people, however there are times when you'll need to get down in the weeds in order to troubleshoot issues. Let's imagine a scenario; you need to verify that a pod is receiving traffic, but the image is built `FROM scratch`. As scratch containers are as minimal as possible, there's no shell in the image, so there's no way you can exec into it and hope to do anything remotely useful.
+
+Clearly we need to break out tcpdump on the host, but how do you construct a filter to ensure you are only seeing the traffic you need? With the power of network namespaces, you don't need to. Ignoring pods with host networking configured for now, each pod is isolated into it's own network stack, and we can use this to our advantage. By running tcpdump inside the same namespace we know we're only collecting the traffic for that pod.
+
+I'll be investigating a single replica of an Nginx ingress-controller `Deployment`. We'll need the pod's name in a moment:
+
+```
+$ kubectl get po | grep nginx
+ingress-nginx-controller-58f5bc766d-hwc2d   1/1     Running   0              5d22h
+```
+
+With that, we now need to figure out the pod's network namespace using `crictl` - this is done on the host machine for that pod. Because `crictl` is built with Kubernetes in mind, the containers are helpfully labelled with information from Kubernetes about the pod and container(s). You can use this information to filter list of pods:
+
+```
+$ crictl ps --label io.kubernetes.pod.name=ingress-nginx-controller-58f5bc766d-hwc2d
+CONTAINER           IMAGE                                                              CREATED             STATE               NAME                ATTEMPT             POD ID
+aa482cc25878a       89ed8c731a3870a99f6f7f2fb6bdaead3882ad80f977e141d68c0a7500c1a4d2   5 days ago          Running             controller          0                   d9f4429d95562
+```
+
+From this, we know the container's ID is `aa482cc25878a`. We can then take that and use `jq` to find the network namespace path:
+
+```
+$ crictl inspect -o json aa482cc25878a  | jq -r '.info.runtimeSpec.linux.namespaces[] | select(.type=="network") | .path'
+/var/run/netns/275cdae1-15ce-433a-a651-f0f46507ff25
+```
+
+With this path, we can use either `nsenter` or `ip netns exec` to run commands in the pod's namespace. First with `nsenter` using the full path:
+
+```
+$ nsenter --net=/var/run/netns/275cdae1-15ce-433a-a651-f0f46507ff25 ip a s
+1: lo: mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host
+       valid_lft forever preferred_lft forever
+45: eth0@if46: mtu 1500 qdisc noqueue state UP group default
+    link/ether 92:b5:12:8f:55:a9 brd ff:ff:ff:ff:ff:ff link-netns df291683-c2fa-4fc5-ae66-6e9ab2f46944
+    inet 10.0.3.179/32 scope global eth0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::90b5:12ff:fe8f:55a9/64 scope link
+       valid_lft forever preferred_lft forever
+```
+
+And then with `ip` using just the namespace ID from the end of the path:
+
+```
+$ ip netns exec 275cdae1-15ce-433a-a651-f0f46507ff25 ip a s
+1: lo: mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host
+       valid_lft forever preferred_lft forever
+45: eth0@if46: mtu 1500 qdisc noqueue state UP group default
+    link/ether 92:b5:12:8f:55:a9 brd ff:ff:ff:ff:ff:ff link-netns df291683-c2fa-4fc5-ae66-6e9ab2f46944
+    inet 10.0.3.179/32 scope global eth0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::90b5:12ff:fe8f:55a9/64 scope link
+       valid_lft forever preferred_lft forever
+```
+
+Armed with this information, you'll be able to utilise any network troubleshooting tools which are available on the host machine in order to debug networking at the container level.

@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Deploying Kubernetes 1.4 on Ubuntu Xenial with Kubeadm | Dicking with Docker</title>
+<meta name="keywords" content="containers, docker, kubernetes, orchestration, ubuntu, xenial">
+<meta name="description" content="With the 1.4 release of Kubernetes, Google have made instantiating a cluster a whole lot easier. Using Kubeadm, you can bring up a cluster with a single command on each node. A further command will create a DaemonSet which brings up a Weave mesh network between all your nodes.
+As always with complex systems such as Kubernetes, there are some potential pitfalls to be aware of. Firstly, the getting started guide notes that v1.">
+<meta name="author" content="Simon Weald">
+<link rel="canonical" href="https://dickingwithdocker.com/posts/deploying-kubernetes-1-4-on-ubuntu-xenial-with-kubeadm/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.9329d037bc79464b26647fb72e079cd738f5d2418b1df4da3b515db9e22cb4d9.css" integrity="sha256-kynQN7x5RksmZH&#43;3Lgec1zj10kGLHfTaO1FdueIstNk=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.f413e19d0714851f6474e7ee9632408e58ac146fbdbe62747134bea2fa3415e0.js" integrity="sha256-9BPhnQcUhR9kdOfuljJAjlisFG&#43;9vmJ0cTS&#43;ovo0FeA="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://dickingwithdocker.com/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://dickingwithdocker.com/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://dickingwithdocker.com/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://dickingwithdocker.com/apple-touch-icon.png">
+<link rel="mask-icon" href="https://dickingwithdocker.com/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="Deploying Kubernetes 1.4 on Ubuntu Xenial with Kubeadm" />
+<meta property="og:description" content="With the 1.4 release of Kubernetes, Google have made instantiating a cluster a whole lot easier. Using Kubeadm, you can bring up a cluster with a single command on each node. A further command will create a DaemonSet which brings up a Weave mesh network between all your nodes.
+As always with complex systems such as Kubernetes, there are some potential pitfalls to be aware of. Firstly, the getting started guide notes that v1." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://dickingwithdocker.com/posts/deploying-kubernetes-1-4-on-ubuntu-xenial-with-kubeadm/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2016-11-17T00:00:00+00:00" />
+<meta property="article:modified_time" content="2016-11-17T00:00:00+00:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Deploying Kubernetes 1.4 on Ubuntu Xenial with Kubeadm"/>
+<meta name="twitter:description" content="With the 1.4 release of Kubernetes, Google have made instantiating a cluster a whole lot easier. Using Kubeadm, you can bring up a cluster with a single command on each node. A further command will create a DaemonSet which brings up a Weave mesh network between all your nodes.
+As always with complex systems such as Kubernetes, there are some potential pitfalls to be aware of. Firstly, the getting started guide notes that v1."/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://dickingwithdocker.com/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Deploying Kubernetes 1.4 on Ubuntu Xenial with Kubeadm",
+      "item": "https://dickingwithdocker.com/posts/deploying-kubernetes-1-4-on-ubuntu-xenial-with-kubeadm/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Deploying Kubernetes 1.4 on Ubuntu Xenial with Kubeadm",
+  "name": "Deploying Kubernetes 1.4 on Ubuntu Xenial with Kubeadm",
+  "description": "With the 1.4 release of Kubernetes, Google have made instantiating a cluster a whole lot easier. Using Kubeadm, you can bring up a cluster with a single command on each node. A further command will create a DaemonSet which brings up a Weave mesh network between all your nodes.\nAs always with complex systems such as Kubernetes, there are some potential pitfalls to be aware of. Firstly, the getting started guide notes that v1.",
+  "keywords": [
+    "containers", "docker", "kubernetes", "orchestration", "ubuntu", "xenial"
+  ],
+  "articleBody": "With the 1.4 release of Kubernetes, Google have made instantiating a cluster a whole lot easier. Using Kubeadm, you can bring up a cluster with a single command on each node. A further command will create a DaemonSet which brings up a Weave mesh network between all your nodes.\nAs always with complex systems such as Kubernetes, there are some potential pitfalls to be aware of. Firstly, the getting started guide notes that v1.11.2 of Docker is recommended, but v1.10.3 and v1.12.1 also work well (don’t go straight for the latest release like I tried to). If you wish to have your nodes talk over a private network, you’ll also need to explicitly declare this when you init the master node, otherwise Kubernetes will default to using your primary interface/route:\nroot@kube1:~# kubeadm init --api-advertise-addresses=172.16.0.128 --api-external-dns-names=kube1.int.domain.com Running pre-flight checks generated token: \"486896.cc87489554fbb1c7\" generated Certificate Authority key and certificate: Issuer: CN=kubernetes | Subject: CN=kubernetes | CA: true Not before: 2016-11-16 20:36:56 +0000 UTC Not After: 2026-11-14 20:36:56 +0000 UTC Public: /etc/kubernetes/pki/ca-pub.pem Private: /etc/kubernetes/pki/ca-key.pem Cert: /etc/kubernetes/pki/ca.pem generated API Server key and certificate: Issuer: CN=kubernetes | Subject: CN=kube-apiserver | CA: false Not before: 2016-11-16 20:36:56 +0000 UTC Not After: 2017-11-16 20:36:56 +0000 UTC Alternate Names: [172.16.0.128 10.96.0.1 kube1.int.domain.com kubernetes kubernetes.default kubernetes.default.svc kubernetes.default.svc.cluster.local] Public: /etc/kubernetes/pki/apiserver-pub.pem Private: /etc/kubernetes/pki/apiserver-key.pem Cert: /etc/kubernetes/pki/apiserver.pem generated Service Account Signing keys: Public: /etc/kubernetes/pki/sa-pub.pem Private: /etc/kubernetes/pki/sa-key.pem created keys and certificates in \"/etc/kubernetes/pki\" created \"/etc/kubernetes/kubelet.conf\" created \"/etc/kubernetes/admin.conf\" created API client configuration created API client, waiting for the control plane to become ready all control plane components are healthy after 13.060118 seconds waiting for at least one node to register and become ready first node is ready after 6.003302 seconds attempting a test deployment test deployment succeeded created essential addon: kube-discovery, waiting for it to become ready kube-discovery is ready after 1.003735 seconds created essential addon: kube-proxy created essential addon: kube-dns Kubernetes master initialised successfully! You can now join any number of machines by running the following on each node: kubeadm join --token=486896.cc87489554fbb1c7 172.16.0.128 With that done, you can see all the service containers up and running on the master node:\nroot@kube1:~# kubectl get pods --namespace=kube-system NAME READY STATUS RESTARTS AGE dummy-2088944543-whf5o 1/1 Running 0 14h etcd-kube1.domain.com 1/1 Running 0 14h kube-apiserver-kube1.domain.com 1/1 Running 0 14h kube-controller-manager-kube1.domain.com 1/1 Running 0 14h kube-discovery-1150918428-qy41j 1/1 Running 0 14h kube-dns-654381707-s92ze 1/1 ContainerCreating 0 14h kube-proxy-2fh61 1/1 Running 0 13h kube-scheduler-kube1.domain.com 1/1 Running 0 14h It’s now time to join your slave nodes to the master:\nroot@kube2:~# kubeadm join --token=871c6f.af7b03c1d93ad11a 172.16.0.128 Running pre-flight checks validating provided token created cluster info discovery client, requesting info from \"http://172.16.0.128:9898/cluster-info/v1/?token-id=871c6f\" cluster info object received, verifying signature using given token cluster info signature and contents are valid, will use API endpoints [https://172.16.0.128:6443] trying to connect to endpoint https://172.16.0.128:6443 detected server version v1.4.4 successfully established connection with endpoint https://172.16.0.128:6443 created API client to obtain unique certificate for this node, generating keys and certificate signing request received signed certificate from the API server: Issuer: CN=kubernetes | Subject: CN=system:node:kube2.domain.com | CA: false Not before: 2016-11-16 12:37:00 +0000 UTC Not After: 2017-11-16 12:37:00 +0000 UTC generating kubelet configuration created \"/etc/kubernetes/kubelet.conf\" Node join complete: * Certificate signing request sent to master and response received. * Kubelet informed of new secure connection details. Run ‘kubectl get nodes’ on the master to see this machine join\nroot@kube1:~# kubectl get nodes NAME STATUS AGE kube1.domain.com Ready 14h kube2.domain.com Ready 14h kube3.domain.com Ready 14h The master now knows about the cluster, however the DNS container will be stuck creating - this is because it needs networking to enable it to spawn successfully. Kubeadm makes this easy enough:\nroot@kube1:/# kubectl apply -f https://git.io/weave-kube daemonset \"weave-net\" created This will create a DaemonSet provided by Weaveworks which in turn pulls down all the necessary Docker containers to build the networking:\nroot@kube1:~# kubectl get pods --all-namespaces NAMESPACE NAME READY STATUS RESTARTS AGE kube-system dummy-2088944543-0h6ww 1/1 Running 0 1h kube-system etcd-kube1.domain.com 1/1 Running 0 1h kube-system kube-apiserver-kube1.domain.com 1/1 Running 0 1h kube-system kube-controller-manager-kube1.domain.com 1/1 Running 0 1h kube-system kube-discovery-1150918428-6hcm9 1/1 Running 0 1h kube-system kube-dns-654381707-p7ul4 3/3 Running 0 1h kube-system kube-proxy-3pchs 1/3 Running 0 1h kube-system kube-proxy-b5hx8 2/3 Running 0 1h kube-system kube-proxy-y9k33 3/3 Running 0 1h kube-system kube-scheduler-kube1.domain.com 1/1 Running 0 1h kube-system weave-net-8vbez 2/3 Running 0 1h kube-system weave-net-x1bfw 1/3 CrashLoopBackOff 15 1h kube-system weave-net-pg4s1 1/3 CrashLoopBackOff 15 1h You can now see the DNS service container has started correctly and is able to serve requests, however the two new weave-net containers on the slave nodes will fail to start. Inspecting the logs for an affected container shows the following:\nroot@kube1:~# kubectl logs weave-net-pg4s1 -c weave --namespace=kube-system 2016/11/16 13:41:49 error contacting APIServer: Get https://10.96.0.1:443/api/v1/nodes: dial tcp 10.96.0.1:443: i/o timeout; trying with fallback: http://localhost:8080 2016/11/16 13:41:49 Could not get peers: Get http://localhost:8080/api/v1/nodes: dial tcp [::1]:8080: getsockopt: connection refused Failed to get peers This is due to the local kube-proxy service on that node using the wrong interface. Fortunately this is easy enough to fix (you’ll need to ensure ‘jq’ is installed first to manipulate the json):\nroot@kube1:~# root@kube1:~# kubectl -n kube-system get ds -l 'component\\=kube-proxy' -o json | jq '.items[0].spec.template.spec.containers[0].command |= .+ [\"--cluster-cidr=10.32.0.0/12\"]' | kubectl apply -f - \u0026amp;\u0026amp; kubectl -n kube-system delete pods -l 'component\\=kube-proxy' daemonset \"kube-proxy\" configured pod \"kube-proxy-3tqjn\" deleted pod \"kube-proxy-572au\" deleted pod \"kube-proxy-tsc3c\" deleted Note that the above is now incorrect for Kubernetes 1.6, you’ll need the following (thanks Mike!):\nkubectl -n kube-system get ds -l 'component=kube-proxy' -o json | jq '.items[0].spec.template.spec.containers[0].command |= .+ [\"--cluster-cidr=10.32.0.0/12\"]' | kubectl apply -f - \u0026\u0026 kubectl -n kube-system delete pods -l 'component=kube-proxy' This will correct the –cluster-cidr flag and then delete the containers. Kubernetes applies a restart policy of ‘always’ to the service containers, so these will be respawned:\nroot@kube1:~# kubectl get pods --all-namespaces NAMESPACE NAME READY STATUS RESTARTS AGE kube-system dummy-2088944543-whf5o 1/1 Running 0 28m kube-system etcd-kube1.analbeard.com 1/1 Running 0 28m kube-system kube-apiserver-kube1.analbeard.com 1/1 Running 0 28m kube-system kube-controller-manager-kube1.analbeard.com 1/1 Running 0 28m kube-system kube-discovery-1150918428-qy41j 1/1 Running 0 28m kube-system kube-dns-654381707-s92ze 3/3 Running 0 27m kube-system kube-proxy-2fh61 1/1 Running 0 48s kube-system kube-proxy-k0c64 1/1 Running 0 48s kube-system kube-proxy-xm82v 1/1 Running 0 48s kube-system kube-scheduler-kube1.analbeard.com 1/1 Running 0 28m kube-system weave-net-gzakd 2/2 Running 1 3m kube-system weave-net-x1bfw 2/2 Running 0 4m kube-system weave-net-y9k33 2/2 Running 1 57s Success! One working cluster. It is worth bearing in mind that deploying via Kubeadm is fairly limited at the moment - it only creates a single etcd container which won’t be resilient if a node is lost. The tool is being heavily worked on however, and more functionality will be added in later releases.\nSources: http://kubernetes.io/docs/getting-started-guides/kubeadm/ http://kubernetes.io/docs/admin/addons/ https://github.com/weaveworks/weave https://www.weave.works/weave-net-kubernetes-integration weave-net CrashLoopBackOff for the second node ",
+  "wordCount" : "1125",
+  "inLanguage": "en",
+  "datePublished": "2016-11-17T00:00:00Z",
+  "dateModified": "2016-11-17T00:00:00Z",
+  "author":{
+    "@type": "Person",
+    "name": "Simon Weald"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://dickingwithdocker.com/posts/deploying-kubernetes-1-4-on-ubuntu-xenial-with-kubeadm/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Dicking with Docker",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://dickingwithdocker.com/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://dickingwithdocker.com/" accesskey="h" title="Dicking with Docker (Alt + H)">Dicking with Docker</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://dickingwithdocker.com/categories/" title="categories">
+                    <span>categories</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://dickingwithdocker.com/tags/" title="tags">
+                    <span>tags</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="https://dickingwithdocker.com/">Home</a>&nbsp;»&nbsp;<a href="https://dickingwithdocker.com/posts/">Posts</a></div>
+    <h1 class="post-title">
+      Deploying Kubernetes 1.4 on Ubuntu Xenial with Kubeadm
+    </h1>
+    <div class="post-meta"><span title='2016-11-17 00:00:00 +0000 UTC'>November 17, 2016</span>&nbsp;·&nbsp;6 min&nbsp;·&nbsp;Simon Weald
+
+</div>
+  </header> 
+  <div class="post-content"><p>With the 1.4 release of Kubernetes, Google have made instantiating a cluster a whole lot easier. Using <a href="http://kubernetes.io/docs/admin/kubeadm/">Kubeadm</a>, you can bring up a cluster with a single command on each node. A further command will create a DaemonSet which brings up a Weave mesh network between all your nodes.</p>
+<p>As always with complex systems such as Kubernetes, there are some potential pitfalls to be aware of. Firstly, the <a href="http://kubernetes.io/docs/getting-started-guides/kubeadm/">getting started guide</a> notes that v1.11.2 of Docker is recommended, but v1.10.3 and v1.12.1 also work well (don&rsquo;t go straight for the latest release like I tried to). If you wish to have your nodes talk over a private network, you&rsquo;ll also need to explicitly declare this when you init the master node, otherwise Kubernetes will default to using your primary interface/route:</p>
+<pre tabindex="0"><code>root@kube1:~# kubeadm init --api-advertise-addresses=172.16.0.128 --api-external-dns-names=kube1.int.domain.com
+Running pre-flight checks
+&lt;master/tokens&gt; generated token: &#34;486896.cc87489554fbb1c7&#34;
+&lt;master/pki&gt; generated Certificate Authority key and certificate:
+Issuer: CN=kubernetes | Subject: CN=kubernetes | CA: true
+Not before: 2016-11-16 20:36:56 +0000 UTC Not After: 2026-11-14 20:36:56 +0000 UTC
+Public: /etc/kubernetes/pki/ca-pub.pem
+Private: /etc/kubernetes/pki/ca-key.pem
+Cert: /etc/kubernetes/pki/ca.pem
+&lt;master/pki&gt; generated API Server key and certificate:
+Issuer: CN=kubernetes | Subject: CN=kube-apiserver | CA: false
+Not before: 2016-11-16 20:36:56 +0000 UTC Not After: 2017-11-16 20:36:56 +0000 UTC
+Alternate Names: [172.16.0.128 10.96.0.1 kube1.int.domain.com kubernetes kubernetes.default kubernetes.default.svc kubernetes.default.svc.cluster.local]
+Public: /etc/kubernetes/pki/apiserver-pub.pem
+Private: /etc/kubernetes/pki/apiserver-key.pem
+Cert: /etc/kubernetes/pki/apiserver.pem
+&lt;master/pki&gt; generated Service Account Signing keys:
+Public: /etc/kubernetes/pki/sa-pub.pem
+Private: /etc/kubernetes/pki/sa-key.pem
+&lt;master/pki&gt; created keys and certificates in &#34;/etc/kubernetes/pki&#34;
+&lt;util/kubeconfig&gt; created &#34;/etc/kubernetes/kubelet.conf&#34;
+&lt;util/kubeconfig&gt; created &#34;/etc/kubernetes/admin.conf&#34;
+&lt;master/apiclient&gt; created API client configuration
+&lt;master/apiclient&gt; created API client, waiting for the control plane to become ready
+&lt;master/apiclient&gt; all control plane components are healthy after 13.060118 seconds
+&lt;master/apiclient&gt; waiting for at least one node to register and become ready
+&lt;master/apiclient&gt; first node is ready after 6.003302 seconds
+&lt;master/apiclient&gt; attempting a test deployment
+&lt;master/apiclient&gt; test deployment succeeded
+&lt;master/discovery&gt; created essential addon: kube-discovery, waiting for it to become ready
+&lt;master/discovery&gt; kube-discovery is ready after 1.003735 seconds
+&lt;master/addons&gt; created essential addon: kube-proxy
+&lt;master/addons&gt; created essential addon: kube-dns
+
+Kubernetes master initialised successfully!
+
+You can now join any number of machines by running the following on each node:
+
+kubeadm join --token=486896.cc87489554fbb1c7 172.16.0.128
+</code></pre><p>With that done, you can see all the service containers up and running on the master node:</p>
+<pre tabindex="0"><code>root@kube1:~# kubectl get pods --namespace=kube-system
+NAME                                          READY     STATUS              RESTARTS   AGE
+dummy-2088944543-whf5o                        1/1       Running             0          14h
+etcd-kube1.domain.com                         1/1       Running             0          14h
+kube-apiserver-kube1.domain.com               1/1       Running             0          14h
+kube-controller-manager-kube1.domain.com      1/1       Running             0          14h
+kube-discovery-1150918428-qy41j               1/1       Running             0          14h
+kube-dns-654381707-s92ze                      1/1       ContainerCreating   0          14h
+kube-proxy-2fh61                              1/1       Running             0          13h
+kube-scheduler-kube1.domain.com               1/1       Running             0          14h
+</code></pre><p>It&rsquo;s now time to join your slave nodes to the master:</p>
+<pre tabindex="0"><code>root@kube2:~# kubeadm join --token=871c6f.af7b03c1d93ad11a 172.16.0.128
+Running pre-flight checks
+&lt;util/tokens&gt; validating provided token
+&lt;node/discovery&gt; created cluster info discovery client, requesting info from &#34;http://172.16.0.128:9898/cluster-info/v1/?token-id=871c6f&#34;
+&lt;node/discovery&gt; cluster info object received, verifying signature using given token
+&lt;node/discovery&gt; cluster info signature and contents are valid, will use API endpoints [https://172.16.0.128:6443]
+&lt;node/bootstrap&gt; trying to connect to endpoint https://172.16.0.128:6443
+&lt;node/bootstrap&gt; detected server version v1.4.4
+&lt;node/bootstrap&gt; successfully established connection with endpoint https://172.16.0.128:6443
+&lt;node/csr&gt; created API client to obtain unique certificate for this node, generating keys and certificate signing request
+&lt;node/csr&gt; received signed certificate from the API server:
+Issuer: CN=kubernetes | Subject: CN=system:node:kube2.domain.com | CA: false
+Not before: 2016-11-16 12:37:00 +0000 UTC Not After: 2017-11-16 12:37:00 +0000 UTC
+&lt;node/csr&gt; generating kubelet configuration
+&lt;util/kubeconfig&gt; created &#34;/etc/kubernetes/kubelet.conf&#34;
+
+Node join complete:
+* Certificate signing request sent to master and response
+  received.
+* Kubelet informed of new secure connection details.
+</code></pre><p>Run &lsquo;kubectl get nodes&rsquo; on the master to see this machine join</p>
+<pre tabindex="0"><code>root@kube1:~# kubectl get nodes
+NAME                  STATUS    AGE
+kube1.domain.com      Ready     14h
+kube2.domain.com      Ready     14h
+kube3.domain.com      Ready     14h
+</code></pre><p>The master now knows about the cluster, however the DNS container will be stuck creating - this is because it needs networking to enable it to spawn successfully. Kubeadm makes this easy enough:</p>
+<pre tabindex="0"><code>root@kube1:/# kubectl apply -f https://git.io/weave-kube
+daemonset &#34;weave-net&#34; created
+</code></pre><p>This will create a DaemonSet provided by <a href="https://github.com/weaveworks/weave">Weaveworks</a> which in turn pulls down all the necessary Docker containers to build the networking:</p>
+<pre tabindex="0"><code>root@kube1:~# kubectl get pods --all-namespaces
+NAMESPACE     NAME                                          READY     STATUS             RESTARTS   AGE
+kube-system   dummy-2088944543-0h6ww                        1/1       Running            0          1h
+kube-system   etcd-kube1.domain.com                         1/1       Running            0          1h
+kube-system   kube-apiserver-kube1.domain.com               1/1       Running            0          1h
+kube-system   kube-controller-manager-kube1.domain.com      1/1       Running            0          1h
+kube-system   kube-discovery-1150918428-6hcm9               1/1       Running            0          1h
+kube-system   kube-dns-654381707-p7ul4                      3/3       Running            0          1h
+kube-system   kube-proxy-3pchs                              1/3       Running            0          1h
+kube-system   kube-proxy-b5hx8                              2/3       Running            0          1h
+kube-system   kube-proxy-y9k33                              3/3       Running            0          1h
+kube-system   kube-scheduler-kube1.domain.com               1/1       Running            0          1h
+kube-system   weave-net-8vbez                               2/3       Running            0          1h
+kube-system   weave-net-x1bfw                               1/3       CrashLoopBackOff   15         1h
+kube-system   weave-net-pg4s1                               1/3       CrashLoopBackOff   15         1h
+</code></pre><p>You can now see the DNS service container has started correctly and is able to serve requests, however the two new weave-net containers on the slave nodes will fail to start. Inspecting the logs for an affected container shows the following:</p>
+<pre tabindex="0"><code>root@kube1:~# kubectl logs weave-net-pg4s1 -c weave --namespace=kube-system
+2016/11/16 13:41:49 error contacting APIServer: Get https://10.96.0.1:443/api/v1/nodes: dial tcp 10.96.0.1:443: i/o timeout; trying with fallback: http://localhost:8080
+2016/11/16 13:41:49 Could not get peers: Get http://localhost:8080/api/v1/nodes: dial tcp [::1]:8080: getsockopt: connection refused
+Failed to get peers
+</code></pre><p>This is due to the local kube-proxy service on that node using the wrong interface. Fortunately this is easy enough to fix (you&rsquo;ll need to ensure &lsquo;jq&rsquo; is installed first to manipulate the json):</p>
+<pre tabindex="0"><code>root@kube1:~# root@kube1:~# kubectl -n kube-system get ds -l &#39;component\=kube-proxy&#39; -o json | jq &#39;.items[0].spec.template.spec.containers[0].command |= .+ [&#34;--cluster-cidr=10.32.0.0/12&#34;]&#39; | kubectl apply -f - &amp;amp;&amp;amp; kubectl -n kube-system delete pods -l &#39;component\=kube-proxy&#39;
+daemonset &#34;kube-proxy&#34; configured
+pod &#34;kube-proxy-3tqjn&#34; deleted
+pod &#34;kube-proxy-572au&#34; deleted
+pod &#34;kube-proxy-tsc3c&#34; deleted
+</code></pre><p>Note that the above is now incorrect for Kubernetes 1.6, you&rsquo;ll need the following (thanks Mike!):</p>
+<pre tabindex="0"><code>kubectl -n kube-system get ds -l &#39;component=kube-proxy&#39; -o json | jq &#39;.items[0].spec.template.spec.containers[0].command |= .+ [&#34;--cluster-cidr=10.32.0.0/12&#34;]&#39; | kubectl apply -f - &amp;&amp; kubectl -n kube-system delete pods -l &#39;component=kube-proxy&#39;
+</code></pre><p>This will correct the &ndash;cluster-cidr flag and then delete the containers. Kubernetes applies a restart policy of &lsquo;always&rsquo; to the service containers, so these will be respawned:</p>
+<pre tabindex="0"><code>root@kube1:~# kubectl get pods --all-namespaces
+NAMESPACE     NAME                                          READY     STATUS    RESTARTS   AGE
+kube-system   dummy-2088944543-whf5o                        1/1       Running   0          28m
+kube-system   etcd-kube1.analbeard.com                      1/1       Running   0          28m
+kube-system   kube-apiserver-kube1.analbeard.com            1/1       Running   0          28m
+kube-system   kube-controller-manager-kube1.analbeard.com   1/1       Running   0          28m
+kube-system   kube-discovery-1150918428-qy41j               1/1       Running   0          28m
+kube-system   kube-dns-654381707-s92ze                      3/3       Running   0          27m
+kube-system   kube-proxy-2fh61                              1/1       Running   0          48s
+kube-system   kube-proxy-k0c64                              1/1       Running   0          48s
+kube-system   kube-proxy-xm82v                              1/1       Running   0          48s
+kube-system   kube-scheduler-kube1.analbeard.com            1/1       Running   0          28m
+kube-system   weave-net-gzakd                               2/2       Running   1          3m
+kube-system   weave-net-x1bfw                               2/2       Running   0          4m
+kube-system   weave-net-y9k33                               2/2       Running   1          57s
+</code></pre><p>Success! One working cluster. It is worth bearing in mind that deploying via Kubeadm is fairly limited at the moment - it only creates a single etcd container which won&rsquo;t be resilient if a node is lost. The tool is being heavily worked on however, and more functionality will be added in later releases.</p>
+<ul>
+<li>Sources:
+<ul>
+<li><a href="http://kubernetes.io/docs/getting-started-guides/kubeadm/">http://kubernetes.io/docs/getting-started-guides/kubeadm/</a></li>
+<li><a href="http://kubernetes.io/docs/admin/addons/">http://kubernetes.io/docs/admin/addons/</a></li>
+<li><a href="https://github.com/weaveworks/weave">https://github.com/weaveworks/weave</a></li>
+<li><a href="https://www.weave.works/weave-net-kubernetes-integration/">https://www.weave.works/weave-net-kubernetes-integration</a></li>
+<li><a href="https://github.com/kubernetes/kubernetes/issues/34101">weave-net CrashLoopBackOff for the second node</a></li>
+</ul>
+</li>
+</ul>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://dickingwithdocker.com/tags/containers/">containers</a></li>
+      <li><a href="https://dickingwithdocker.com/tags/docker/">docker</a></li>
+      <li><a href="https://dickingwithdocker.com/tags/kubernetes/">kubernetes</a></li>
+      <li><a href="https://dickingwithdocker.com/tags/orchestration/">orchestration</a></li>
+      <li><a href="https://dickingwithdocker.com/tags/ubuntu/">ubuntu</a></li>
+      <li><a href="https://dickingwithdocker.com/tags/xenial/">xenial</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="https://dickingwithdocker.com/posts/forcing-kubernetes-to-use-a-secondary-interface/">
+    <span class="title">« Prev</span>
+    <br>
+    <span>Forcing Kubernetes to use a secondary interface</span>
+  </a>
+</nav>
+
+
+<ul class="share-buttons">
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Deploying Kubernetes 1.4 on Ubuntu Xenial with Kubeadm on x"
+            href="https://x.com/intent/tweet/?text=Deploying%20Kubernetes%201.4%20on%20Ubuntu%20Xenial%20with%20Kubeadm&amp;url=https%3a%2f%2fdickingwithdocker.com%2fposts%2fdeploying-kubernetes-1-4-on-ubuntu-xenial-with-kubeadm%2f&amp;hashtags=containers%2cdocker%2ckubernetes%2corchestration%2cubuntu%2cxenial">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M512 62.554 L 512 449.446 C 512 483.97 483.97 512 449.446 512 L 62.554 512 C 28.03 512 0 483.97 0 449.446 L 0 62.554 C 0 28.03 28.029 0 62.554 0 L 449.446 0 C 483.971 0 512 28.03 512 62.554 Z M 269.951 190.75 L 182.567 75.216 L 56 75.216 L 207.216 272.95 L 63.9 436.783 L 125.266 436.783 L 235.9 310.383 L 332.567 436.783 L 456 436.783 L 298.367 228.367 L 432.367 75.216 L 371.033 75.216 Z M 127.633 110 L 164.101 110 L 383.481 400.065 L 349.5 400.065 Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Deploying Kubernetes 1.4 on Ubuntu Xenial with Kubeadm on linkedin"
+            href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fdickingwithdocker.com%2fposts%2fdeploying-kubernetes-1-4-on-ubuntu-xenial-with-kubeadm%2f&amp;title=Deploying%20Kubernetes%201.4%20on%20Ubuntu%20Xenial%20with%20Kubeadm&amp;summary=Deploying%20Kubernetes%201.4%20on%20Ubuntu%20Xenial%20with%20Kubeadm&amp;source=https%3a%2f%2fdickingwithdocker.com%2fposts%2fdeploying-kubernetes-1-4-on-ubuntu-xenial-with-kubeadm%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Deploying Kubernetes 1.4 on Ubuntu Xenial with Kubeadm on reddit"
+            href="https://reddit.com/submit?url=https%3a%2f%2fdickingwithdocker.com%2fposts%2fdeploying-kubernetes-1-4-on-ubuntu-xenial-with-kubeadm%2f&title=Deploying%20Kubernetes%201.4%20on%20Ubuntu%20Xenial%20with%20Kubeadm">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-3.446,265.638c0,-22.964 -18.616,-41.58 -41.58,-41.58c-11.211,0 -21.361,4.457 -28.841,11.666c-28.424,-20.508 -67.586,-33.757 -111.204,-35.278l18.941,-89.121l61.884,13.157c0.756,15.734 13.642,28.29 29.56,28.29c16.407,0 29.706,-13.299 29.706,-29.701c0,-16.403 -13.299,-29.702 -29.706,-29.702c-11.666,0 -21.657,6.792 -26.515,16.578l-69.105,-14.69c-1.922,-0.418 -3.939,-0.042 -5.585,1.036c-1.658,1.073 -2.811,2.761 -3.224,4.686l-21.152,99.438c-44.258,1.228 -84.046,14.494 -112.837,35.232c-7.468,-7.164 -17.589,-11.591 -28.757,-11.591c-22.965,0 -41.585,18.616 -41.585,41.58c0,16.896 10.095,31.41 24.568,37.918c-0.639,4.135 -0.99,8.328 -0.99,12.576c0,63.977 74.469,115.836 166.33,115.836c91.861,0 166.334,-51.859 166.334,-115.836c0,-4.218 -0.347,-8.387 -0.977,-12.493c14.564,-6.47 24.735,-21.034 24.735,-38.001Zm-119.474,108.193c-20.27,20.241 -59.115,21.816 -70.534,21.816c-11.428,0 -50.277,-1.575 -70.522,-21.82c-3.007,-3.008 -3.007,-7.882 0,-10.889c3.003,-2.999 7.882,-3.003 10.885,0c12.777,12.781 40.11,17.317 59.637,17.317c19.522,0 46.86,-4.536 59.657,-17.321c3.016,-2.999 7.886,-2.995 10.885,0.008c3.008,3.011 3.003,7.882 -0.008,10.889Zm-5.23,-48.781c-16.373,0 -29.701,-13.324 -29.701,-29.698c0,-16.381 13.328,-29.714 29.701,-29.714c16.378,0 29.706,13.333 29.706,29.714c0,16.374 -13.328,29.698 -29.706,29.698Zm-160.386,-29.702c0,-16.381 13.328,-29.71 29.714,-29.71c16.369,0 29.689,13.329 29.689,29.71c0,16.373 -13.32,29.693 -29.689,29.693c-16.386,0 -29.714,-13.32 -29.714,-29.693Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Deploying Kubernetes 1.4 on Ubuntu Xenial with Kubeadm on whatsapp"
+            href="https://api.whatsapp.com/send?text=Deploying%20Kubernetes%201.4%20on%20Ubuntu%20Xenial%20with%20Kubeadm%20-%20https%3a%2f%2fdickingwithdocker.com%2fposts%2fdeploying-kubernetes-1-4-on-ubuntu-xenial-with-kubeadm%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-58.673,127.703c-33.842,-33.881 -78.847,-52.548 -126.798,-52.568c-98.799,0 -179.21,80.405 -179.249,179.234c-0.013,31.593 8.241,62.428 23.927,89.612l-25.429,92.884l95.021,-24.925c26.181,14.28 55.659,21.807 85.658,21.816l0.074,0c98.789,0 179.206,-80.413 179.247,-179.243c0.018,-47.895 -18.61,-92.93 -52.451,-126.81Zm-126.797,275.782l-0.06,0c-26.734,-0.01 -52.954,-7.193 -75.828,-20.767l-5.441,-3.229l-56.386,14.792l15.05,-54.977l-3.542,-5.637c-14.913,-23.72 -22.791,-51.136 -22.779,-79.287c0.033,-82.142 66.867,-148.971 149.046,-148.971c39.793,0.014 77.199,15.531 105.329,43.692c28.128,28.16 43.609,65.592 43.594,105.4c-0.034,82.149 -66.866,148.983 -148.983,148.984Zm81.721,-111.581c-4.479,-2.242 -26.499,-13.075 -30.604,-14.571c-4.105,-1.495 -7.091,-2.241 -10.077,2.241c-2.986,4.483 -11.569,14.572 -14.182,17.562c-2.612,2.988 -5.225,3.364 -9.703,1.12c-4.479,-2.241 -18.91,-6.97 -36.017,-22.23c-13.314,-11.876 -22.304,-26.542 -24.916,-31.026c-2.612,-4.484 -0.279,-6.908 1.963,-9.14c2.016,-2.007 4.48,-5.232 6.719,-7.847c2.24,-2.615 2.986,-4.484 4.479,-7.472c1.493,-2.99 0.747,-5.604 -0.374,-7.846c-1.119,-2.241 -10.077,-24.288 -13.809,-33.256c-3.635,-8.733 -7.327,-7.55 -10.077,-7.688c-2.609,-0.13 -5.598,-0.158 -8.583,-0.158c-2.986,0 -7.839,1.121 -11.944,5.604c-4.105,4.484 -15.675,15.32 -15.675,37.364c0,22.046 16.048,43.342 18.287,46.332c2.24,2.99 31.582,48.227 76.511,67.627c10.685,4.615 19.028,7.371 25.533,9.434c10.728,3.41 20.492,2.929 28.209,1.775c8.605,-1.285 26.499,-10.833 30.231,-21.295c3.732,-10.464 3.732,-19.431 2.612,-21.298c-1.119,-1.869 -4.105,-2.99 -8.583,-5.232Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Deploying Kubernetes 1.4 on Ubuntu Xenial with Kubeadm on ycombinator"
+            href="https://news.ycombinator.com/submitlink?t=Deploying%20Kubernetes%201.4%20on%20Ubuntu%20Xenial%20with%20Kubeadm&u=https%3a%2f%2fdickingwithdocker.com%2fposts%2fdeploying-kubernetes-1-4-on-ubuntu-xenial-with-kubeadm%2f">
+            <svg version="1.1" xml:space="preserve" width="30px" height="30px" viewBox="0 0 512 512" fill="currentColor"
+                xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape">
+                <path
+                    d="M449.446 0C483.971 0 512 28.03 512 62.554L512 449.446C512 483.97 483.97 512 449.446 512L62.554 512C28.03 512 0 483.97 0 449.446L0 62.554C0 28.03 28.029 0 62.554 0L449.446 0ZM183.8767 87.9921H121.8427L230.6673 292.4508V424.0079H281.3328V292.4508L390.1575 87.9921H328.1233L256 238.2489z" />
+            </svg>
+        </a>
+    </li>
+</ul>
+
+  </footer><div id="disqus_thread"></div>
+<script type="application/javascript">
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "dickingwithdocker" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2023 <a href="https://dickingwithdocker.com/">Dicking with Docker</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

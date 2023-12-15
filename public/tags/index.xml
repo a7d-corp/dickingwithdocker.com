@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Tags on Dicking with Docker</title>
+    <link>https://dickingwithdocker.com/tags/</link>
+    <description>Recent content in Tags on Dicking with Docker</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Thu, 09 Sep 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://dickingwithdocker.com/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>consul</title>
+      <link>https://dickingwithdocker.com/tags/consul/</link>
+      <pubDate>Thu, 09 Sep 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/tags/consul/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>dns</title>
+      <link>https://dickingwithdocker.com/tags/dns/</link>
+      <pubDate>Thu, 09 Sep 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/tags/dns/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>hashicorp</title>
+      <link>https://dickingwithdocker.com/tags/hashicorp/</link>
+      <pubDate>Thu, 09 Sep 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/tags/hashicorp/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>ansible</title>
+      <link>https://dickingwithdocker.com/tags/ansible/</link>
+      <pubDate>Wed, 27 Jun 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/tags/ansible/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>python</title>
+      <link>https://dickingwithdocker.com/tags/python/</link>
+      <pubDate>Wed, 27 Jun 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/tags/python/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>automation</title>
+      <link>https://dickingwithdocker.com/tags/automation/</link>
+      <pubDate>Sun, 18 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/tags/automation/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>containers</title>
+      <link>https://dickingwithdocker.com/tags/containers/</link>
+      <pubDate>Sun, 18 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/tags/containers/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>deployment</title>
+      <link>https://dickingwithdocker.com/tags/deployment/</link>
+      <pubDate>Sun, 18 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/tags/deployment/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>kubernetes</title>
+      <link>https://dickingwithdocker.com/tags/kubernetes/</link>
+      <pubDate>Sun, 18 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/tags/kubernetes/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>orchestration</title>
+      <link>https://dickingwithdocker.com/tags/orchestration/</link>
+      <pubDate>Sun, 18 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/tags/orchestration/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>config-management</title>
+      <link>https://dickingwithdocker.com/tags/config-management/</link>
+      <pubDate>Wed, 09 Aug 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/tags/config-management/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>docker</title>
+      <link>https://dickingwithdocker.com/tags/docker/</link>
+      <pubDate>Thu, 17 Nov 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/tags/docker/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>ubuntu</title>
+      <link>https://dickingwithdocker.com/tags/ubuntu/</link>
+      <pubDate>Thu, 17 Nov 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/tags/ubuntu/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>xenial</title>
+      <link>https://dickingwithdocker.com/tags/xenial/</link>
+      <pubDate>Thu, 17 Nov 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/tags/xenial/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

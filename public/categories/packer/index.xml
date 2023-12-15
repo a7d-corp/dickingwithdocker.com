@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>packer on Dicking with Docker</title>
+    <link>https://dickingwithdocker.com/categories/packer/</link>
+    <description>Recent content in packer on Dicking with Docker</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sun, 18 Mar 2018 00:00:00 +0000</lastBuildDate><atom:link href="https://dickingwithdocker.com/categories/packer/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Over-engineering my website with Kubernetes</title>
+      <link>https://dickingwithdocker.com/posts/over-engineering-my-website-kubernetes/</link>
+      <pubDate>Sun, 18 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/posts/over-engineering-my-website-kubernetes/</guid>
+      <description>A solution in need of a problem Like all good sysadmins, my personal website has been a &amp;lsquo;coming soon&amp;rsquo; splash page for quite some time. According to the Wayback Machine, it&amp;rsquo;s been this way since some time in 2014. As I&amp;rsquo;m sure many can sympathise with, there are always far more interesting and shiny things to be experimenting with than building a website.
+One of the interesting things I like to experiment with is Kubernetes (as should be apparent from the tag cloud).</description>
+    </item>
+    
+  </channel>
+</rss>

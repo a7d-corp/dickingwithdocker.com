@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Posts | Dicking with Docker</title>
+<meta name="keywords" content="">
+<meta name="description" content="Posts - Dicking with Docker">
+<meta name="author" content="Simon Weald">
+<link rel="canonical" href="https://dickingwithdocker.com/posts/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.9329d037bc79464b26647fb72e079cd738f5d2418b1df4da3b515db9e22cb4d9.css" integrity="sha256-kynQN7x5RksmZH&#43;3Lgec1zj10kGLHfTaO1FdueIstNk=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://dickingwithdocker.com/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://dickingwithdocker.com/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://dickingwithdocker.com/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://dickingwithdocker.com/apple-touch-icon.png">
+<link rel="mask-icon" href="https://dickingwithdocker.com/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" type="application/rss+xml" href="https://dickingwithdocker.com/posts/index.xml">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="Posts" />
+<meta property="og:description" content="Eventually consistent" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://dickingwithdocker.com/posts/" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Posts"/>
+<meta name="twitter:description" content="Eventually consistent"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://dickingwithdocker.com/posts/"
+    }
+  ]
+}
+</script>
+</head>
+
+<body class="list" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://dickingwithdocker.com/" accesskey="h" title="Dicking with Docker (Alt + H)">Dicking with Docker</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://dickingwithdocker.com/categories/" title="categories">
+                    <span>categories</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://dickingwithdocker.com/tags/" title="tags">
+                    <span>tags</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main"> 
+<header class="page-header"><div class="breadcrumbs"><a href="https://dickingwithdocker.com/">Home</a></div>
+  <h1>
+    Posts
+  </h1>
+</header>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2>Troubleshooting Network Traffic with CRI-O and Kubernetes
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Running immutable infra is the holy grail for many people, however there are times when you’ll need to get down in the weeds in order to troubleshoot issues. Let’s imagine a scenario; you need to verify that a pod is receiving traffic, but the image is built FROM scratch. As scratch containers are as minimal as possible, there’s no shell in the image, so there’s no way you can exec into it and hope to do anything remotely useful....</p>
+  </div>
+  <footer class="entry-footer"><span title='2021-12-18 00:00:00 +0000 UTC'>December 18, 2021</span>&nbsp;·&nbsp;3 min&nbsp;·&nbsp;Simon Weald</footer>
+  <a class="entry-link" aria-label="post link to Troubleshooting Network Traffic with CRI-O and Kubernetes" href="https://dickingwithdocker.com/posts/troubleshooting-network-traffic-with-cri-o-and-kubernetes/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2>Allowing DNS lookups with Hashicorp Consul &#43; ACLs enabled
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>I’ve recently been experimenting with Hashicorp’s Consul in my home infrastructure because I want to use it to provide service discovery and automatic DNS provisioning when I create Proxmox instances with Terraform. Consul is a bit of a hefty beast to get to grips with and getting DNS lookups working when you have ACLs enabled can be a little tricky - it’s taken me a day or two of going round in circles to figure this one out....</p>
+  </div>
+  <footer class="entry-footer"><span title='2021-09-09 00:00:00 +0000 UTC'>September 9, 2021</span>&nbsp;·&nbsp;2 min&nbsp;·&nbsp;Simon Weald</footer>
+  <a class="entry-link" aria-label="post link to Allowing DNS lookups with Hashicorp Consul &#43; ACLs enabled" href="https://dickingwithdocker.com/posts/allowing-dns-lookups-with-hashicorp-consul-acls-enabled/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2>Using BGP to integrate Cilium with OPNsense
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>If (like me) you happen to follow the development of the Cilium CNI plugin for Kubernetes then you’ll have seen the recent 1.10 release which included many shiny features. One exciting addition is the ability to announce Service IPs via BGP.
+Running Kubernetes in a homelab environment quickly highlights that there are some aspects which are a little lacking when compared to the integration you get from the cloud provider offerings....</p>
+  </div>
+  <footer class="entry-footer"><span title='2021-05-31 00:00:00 +0000 UTC'>May 31, 2021</span>&nbsp;·&nbsp;5 min&nbsp;·&nbsp;Simon Weald</footer>
+  <a class="entry-link" aria-label="post link to Using BGP to integrate Cilium with OPNsense" href="https://dickingwithdocker.com/posts/using-bgp-to-integrate-cilium-with-opnsense/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2>Securing SSH with the Vault SSH backend and GitHub authentication
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>This blog is going to be about using Hashicorp’s Vault to issue short-lived certificates to use with SSH. Most guides have you using a username &amp; password to authenticate with Vault, but I’ve chosen to delegate that to GitHub instead.
+I’m assuming you already have a Vault server running - I won’t be covering that in the course of this blog. You’ll also need a sufficiently-privileged Vault token, and jq installed on the machine you wish to SSH from....</p>
+  </div>
+  <footer class="entry-footer"><span title='2020-05-30 00:00:00 +0000 UTC'>May 30, 2020</span>&nbsp;·&nbsp;7 min&nbsp;·&nbsp;Simon Weald</footer>
+  <a class="entry-link" aria-label="post link to Securing SSH with the Vault SSH backend and GitHub authentication" href="https://dickingwithdocker.com/posts/securing-ssh-with-the-vault-ssh-backend-and-github-authentication/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2>Thanos and Prometheus without Kubernetes
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Running Thanos without Kubernetes If you’ve been around the cloud-native world for a while, you’ll no doubt be familiar with (and quite likely already be using) Prometheus. You may however not have heard of Thanos. Put simply, Thanos takes Prometheus and makes it even more awesome.
+In their own words, the high-level description of Thanos is the following:
+Thanos is a set of components that can be composed into a highly available metric system with unlimited storage capacity, which can be added seamlessly on top of existing Prometheus deployments....</p>
+  </div>
+  <footer class="entry-footer"><span title='2019-03-11 00:00:00 +0000 UTC'>March 11, 2019</span>&nbsp;·&nbsp;6 min&nbsp;·&nbsp;Simon Weald</footer>
+  <a class="entry-link" aria-label="post link to Thanos and Prometheus without Kubernetes" href="https://dickingwithdocker.com/posts/thanos-prometheus-without-kubernetes/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2>Terraform S3 remote state with Minio and Docker
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Storing Terraform’s remote state in Minio Whilst AWS’s free S3 tier is almost certainly sufficient to store Terraform’s remote state, it may be the case that you have a requirement to keep the data on-site, or alternatively if you’re using Terraform in an air-gapped environment then you have no choice but to self-host.
+Enter Minio. If you’ve not used it before, the TLDR is that Minio provides an S3-compatible API in a single binary....</p>
+  </div>
+  <footer class="entry-footer"><span title='2019-02-27 00:00:00 +0000 UTC'>February 27, 2019</span>&nbsp;·&nbsp;3 min&nbsp;·&nbsp;Simon Weald</footer>
+  <a class="entry-link" aria-label="post link to Terraform S3 remote state with Minio and Docker" href="https://dickingwithdocker.com/posts/terraform-s3-remote-state-with-minio-and-docker/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2>Wildcard LetsEncrypt renewal with Ansible and Memset
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Obtaining a wildcard LetsEncrypt cert with Ansible Earlier this year, LetsEncrypt made their wildcard x509 certificates available to the general public. Whilst this is a massive step forward over individual certificates for each domain, it does come with the overhead of having to distribute the wildcard certificate to the (possibly many) places you would use it. Ignoring that issue for now, I wrote a quick Ansible playbook which uses the dns-01 challenge method and my Memset DNS management modules (available in Ansible 2....</p>
+  </div>
+  <footer class="entry-footer"><span title='2018-08-07 00:00:00 +0000 UTC'>August 7, 2018</span>&nbsp;·&nbsp;3 min&nbsp;·&nbsp;Simon Weald</footer>
+  <a class="entry-link" aria-label="post link to Wildcard LetsEncrypt renewal with Ansible and Memset" href="https://dickingwithdocker.com/posts/wildcard-letsencrypt-renewal-with-ansible-and-memset/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2>Ansible module development gotchas
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Lessons I learnt whilst developing modules Having now spent quite some time working on my initial Ansible modules for Memset, I’ve assembled some handy hints on areas which tripped me up at various times in my journey.
+It should be noted that this post is written from the point of view of someone who is not a developer and is therefore not as au fait with some of the processes mentioned as others may be....</p>
+  </div>
+  <footer class="entry-footer"><span title='2018-06-27 00:00:00 +0000 UTC'>June 27, 2018</span>&nbsp;·&nbsp;5 min&nbsp;·&nbsp;Simon Weald</footer>
+  <a class="entry-link" aria-label="post link to Ansible module development gotchas" href="https://dickingwithdocker.com/posts/ansible-module-development-gotchas/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2>Over-engineering my website with Kubernetes
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>A solution in need of a problem Like all good sysadmins, my personal website has been a ‘coming soon’ splash page for quite some time. According to the Wayback Machine, it’s been this way since some time in 2014. As I’m sure many can sympathise with, there are always far more interesting and shiny things to be experimenting with than building a website.
+One of the interesting things I like to experiment with is Kubernetes (as should be apparent from the tag cloud)....</p>
+  </div>
+  <footer class="entry-footer"><span title='2018-03-18 00:00:00 +0000 UTC'>March 18, 2018</span>&nbsp;·&nbsp;2 min&nbsp;·&nbsp;Simon Weald</footer>
+  <a class="entry-link" aria-label="post link to Over-engineering my website with Kubernetes" href="https://dickingwithdocker.com/posts/over-engineering-my-website-kubernetes/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2>Deploying Kubernetes on VMs with Kubespray
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>All the choices So you’re looking to start using Kubernetes, but you’re overwhelmed by the multitude of deployment options available? Judging by the length of the Picking the Right Solution section to the Kubernetes docs, it’s safe to assume that you’re not alone. Even after you’ve made it past the provisioning stage, you then need to learn how to administrate what is a very complex system. In short; Kubernetes is not easy....</p>
+  </div>
+  <footer class="entry-footer"><span title='2017-08-09 00:00:00 +0000 UTC'>August 9, 2017</span>&nbsp;·&nbsp;9 min&nbsp;·&nbsp;Simon Weald</footer>
+  <a class="entry-link" aria-label="post link to Deploying Kubernetes on VMs with Kubespray" href="https://dickingwithdocker.com/posts/deploying-kubernetes-vms-kubespray/"></a>
+</article>
+<footer class="page-footer">
+  <nav class="pagination">
+    <a class="next" href="https://dickingwithdocker.com/posts/page/2/">Next&nbsp;&nbsp;»
+    </a>
+  </nav>
+</footer>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2023 <a href="https://dickingwithdocker.com/">Dicking with Docker</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

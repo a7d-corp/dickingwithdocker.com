@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>prometheus on Dicking with Docker</title>
+    <link>https://dickingwithdocker.com/categories/prometheus/</link>
+    <description>Recent content in prometheus on Dicking with Docker</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Mon, 11 Mar 2019 00:00:00 +0000</lastBuildDate><atom:link href="https://dickingwithdocker.com/categories/prometheus/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Thanos and Prometheus without Kubernetes</title>
+      <link>https://dickingwithdocker.com/posts/thanos-prometheus-without-kubernetes/</link>
+      <pubDate>Mon, 11 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/posts/thanos-prometheus-without-kubernetes/</guid>
+      <description>Running Thanos without Kubernetes If you&amp;rsquo;ve been around the cloud-native world for a while, you&amp;rsquo;ll no doubt be familiar with (and quite likely already be using) Prometheus. You may however not have heard of Thanos. Put simply, Thanos takes Prometheus and makes it even more awesome.
+In their own words, the high-level description of Thanos is the following:
+Thanos is a set of components that can be composed into a highly available metric system with unlimited storage capacity, which can be added seamlessly on top of existing Prometheus deployments.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>python on Dicking with Docker</title>
+    <link>https://dickingwithdocker.com/tags/python/</link>
+    <description>Recent content in python on Dicking with Docker</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Wed, 27 Jun 2018 00:00:00 +0000</lastBuildDate><atom:link href="https://dickingwithdocker.com/tags/python/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Ansible module development gotchas</title>
+      <link>https://dickingwithdocker.com/posts/ansible-module-development-gotchas/</link>
+      <pubDate>Wed, 27 Jun 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/posts/ansible-module-development-gotchas/</guid>
+      <description>Lessons I learnt whilst developing modules Having now spent quite some time working on my initial Ansible modules for Memset, I&amp;rsquo;ve assembled some handy hints on areas which tripped me up at various times in my journey.
+It should be noted that this post is written from the point of view of someone who is not a developer and is therefore not as au fait with some of the processes mentioned as others may be.</description>
+    </item>
+    
+  </channel>
+</rss>

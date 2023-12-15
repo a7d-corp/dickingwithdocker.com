@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>linux on Dicking with Docker</title>
+    <link>https://dickingwithdocker.com/categories/linux/</link>
+    <description>Recent content in linux on Dicking with Docker</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Thu, 09 Sep 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://dickingwithdocker.com/categories/linux/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Allowing DNS lookups with Hashicorp Consul &#43; ACLs enabled</title>
+      <link>https://dickingwithdocker.com/posts/allowing-dns-lookups-with-hashicorp-consul-acls-enabled/</link>
+      <pubDate>Thu, 09 Sep 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/posts/allowing-dns-lookups-with-hashicorp-consul-acls-enabled/</guid>
+      <description>I&amp;rsquo;ve recently been experimenting with Hashicorp&amp;rsquo;s Consul in my home infrastructure because I want to use it to provide service discovery and automatic DNS provisioning when I create Proxmox instances with Terraform. Consul is a bit of a hefty beast to get to grips with and getting DNS lookups working when you have ACLs enabled can be a little tricky - it&amp;rsquo;s taken me a day or two of going round in circles to figure this one out.</description>
+    </item>
+    
+    <item>
+      <title>Securing SSH with the Vault SSH backend and GitHub authentication</title>
+      <link>https://dickingwithdocker.com/posts/securing-ssh-with-the-vault-ssh-backend-and-github-authentication/</link>
+      <pubDate>Sat, 30 May 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/posts/securing-ssh-with-the-vault-ssh-backend-and-github-authentication/</guid>
+      <description>This blog is going to be about using Hashicorp&amp;rsquo;s Vault to issue short-lived certificates to use with SSH. Most guides have you using a username &amp;amp; password to authenticate with Vault, but I&amp;rsquo;ve chosen to delegate that to GitHub instead.
+I&amp;rsquo;m assuming you already have a Vault server running - I won&amp;rsquo;t be covering that in the course of this blog. You&amp;rsquo;ll also need a sufficiently-privileged Vault token, and jq installed on the machine you wish to SSH from.</description>
+    </item>
+    
+  </channel>
+</rss>

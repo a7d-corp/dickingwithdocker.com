@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>deployment on Dicking with Docker</title>
+    <link>https://dickingwithdocker.com/categories/deployment/</link>
+    <description>Recent content in deployment on Dicking with Docker</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Thu, 09 Sep 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://dickingwithdocker.com/categories/deployment/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Allowing DNS lookups with Hashicorp Consul &#43; ACLs enabled</title>
+      <link>https://dickingwithdocker.com/posts/allowing-dns-lookups-with-hashicorp-consul-acls-enabled/</link>
+      <pubDate>Thu, 09 Sep 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/posts/allowing-dns-lookups-with-hashicorp-consul-acls-enabled/</guid>
+      <description>I&amp;rsquo;ve recently been experimenting with Hashicorp&amp;rsquo;s Consul in my home infrastructure because I want to use it to provide service discovery and automatic DNS provisioning when I create Proxmox instances with Terraform. Consul is a bit of a hefty beast to get to grips with and getting DNS lookups working when you have ACLs enabled can be a little tricky - it&amp;rsquo;s taken me a day or two of going round in circles to figure this one out.</description>
+    </item>
+    
+    <item>
+      <title>Over-engineering my website with Kubernetes</title>
+      <link>https://dickingwithdocker.com/posts/over-engineering-my-website-kubernetes/</link>
+      <pubDate>Sun, 18 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/posts/over-engineering-my-website-kubernetes/</guid>
+      <description>A solution in need of a problem Like all good sysadmins, my personal website has been a &amp;lsquo;coming soon&amp;rsquo; splash page for quite some time. According to the Wayback Machine, it&amp;rsquo;s been this way since some time in 2014. As I&amp;rsquo;m sure many can sympathise with, there are always far more interesting and shiny things to be experimenting with than building a website.
+One of the interesting things I like to experiment with is Kubernetes (as should be apparent from the tag cloud).</description>
+    </item>
+    
+    <item>
+      <title>Deploying Kubernetes on VMs with Kubespray</title>
+      <link>https://dickingwithdocker.com/posts/deploying-kubernetes-vms-kubespray/</link>
+      <pubDate>Wed, 09 Aug 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/posts/deploying-kubernetes-vms-kubespray/</guid>
+      <description>All the choices So you&amp;rsquo;re looking to start using Kubernetes, but you&amp;rsquo;re overwhelmed by the multitude of deployment options available? Judging by the length of the Picking the Right Solution section to the Kubernetes docs, it&amp;rsquo;s safe to assume that you&amp;rsquo;re not alone. Even after you&amp;rsquo;ve made it past the provisioning stage, you then need to learn how to administrate what is a very complex system. In short; Kubernetes is not easy.</description>
+    </item>
+    
+    <item>
+      <title>Ansible Node Bootstrapping</title>
+      <link>https://dickingwithdocker.com/posts/ansible-node-bootstrapping/</link>
+      <pubDate>Fri, 04 Aug 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/posts/ansible-node-bootstrapping/</guid>
+      <description>When you receive a new server, there are a variety of pre-requisites required before Ansible can be used to administrate the host.
+Below is my own personal playbook which works for both Debian and RedHat (and derivative) systems.
+--- # ansible-playbook bootstrap-ansible-target.yml -b -e &amp;#39;user=user&amp;#39; - hosts: &amp;#34;{{ host }}&amp;#34; remote_user: &amp;#34;{{ user | default(&amp;#39;root&amp;#39;) }}&amp;#34; gather_facts: no pre_tasks: - name: attempt to update apt&amp;#39;s cache raw: test -e /usr/bin/apt-get &amp;amp;&amp;amp; apt-get update ignore_errors: yes - name: attempt to install Python on Debian-based systems raw: test -e /usr/bin/apt-get &amp;amp;&amp;amp; apt-get -y install python-simplejson python ignore_errors: yes - name: attempt to install Python on CentOS-based systems raw: test -e /usr/bin/yum &amp;amp;&amp;amp; yum -y install python-simplejson python ignore_errors: yes - setup: tasks: - name: Create admin user group group: name: admin system: yes state: present - name: Ensure sudo is installed package: name: sudo state: present - name: Create Ansible user user: name: ansible shell: /bin/bash comment: &amp;#34;Ansible management user&amp;#34; home: /home/ansible createhome: yes - name: Add Ansible user to admin group user: name: ansible groups: admin append: yes - name: Add authorized key authorized_key: user: ansible state: present key: &amp;#34;{{ lookup(&amp;#39;file&amp;#39;, &amp;#39;/etc/ansible/.</description>
+    </item>
+    
+  </channel>
+</rss>

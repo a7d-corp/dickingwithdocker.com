@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>letsencrypt on Dicking with Docker</title>
+    <link>https://dickingwithdocker.com/categories/letsencrypt/</link>
+    <description>Recent content in letsencrypt on Dicking with Docker</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Tue, 07 Aug 2018 00:00:00 +0000</lastBuildDate><atom:link href="https://dickingwithdocker.com/categories/letsencrypt/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Wildcard LetsEncrypt renewal with Ansible and Memset</title>
+      <link>https://dickingwithdocker.com/posts/wildcard-letsencrypt-renewal-with-ansible-and-memset/</link>
+      <pubDate>Tue, 07 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/posts/wildcard-letsencrypt-renewal-with-ansible-and-memset/</guid>
+      <description>Obtaining a wildcard LetsEncrypt cert with Ansible Earlier this year, LetsEncrypt made their wildcard x509 certificates available to the general public. Whilst this is a massive step forward over individual certificates for each domain, it does come with the overhead of having to distribute the wildcard certificate to the (possibly many) places you would use it. Ignoring that issue for now, I wrote a quick Ansible playbook which uses the dns-01 challenge method and my Memset DNS management modules (available in Ansible 2.</description>
+    </item>
+    
+  </channel>
+</rss>

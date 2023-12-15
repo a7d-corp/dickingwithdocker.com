@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Dicking with Docker</title>
+    <link>https://dickingwithdocker.com/</link>
+    <description>Recent content on Dicking with Docker</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sat, 18 Dec 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://dickingwithdocker.com/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Troubleshooting Network Traffic with CRI-O and Kubernetes</title>
+      <link>https://dickingwithdocker.com/posts/troubleshooting-network-traffic-with-cri-o-and-kubernetes/</link>
+      <pubDate>Sat, 18 Dec 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/posts/troubleshooting-network-traffic-with-cri-o-and-kubernetes/</guid>
+      <description>Running immutable infra is the holy grail for many people, however there are times when you&amp;rsquo;ll need to get down in the weeds in order to troubleshoot issues. Let&amp;rsquo;s imagine a scenario; you need to verify that a pod is receiving traffic, but the image is built FROM scratch. As scratch containers are as minimal as possible, there&amp;rsquo;s no shell in the image, so there&amp;rsquo;s no way you can exec into it and hope to do anything remotely useful.</description>
+    </item>
+    
+    <item>
+      <title>Allowing DNS lookups with Hashicorp Consul &#43; ACLs enabled</title>
+      <link>https://dickingwithdocker.com/posts/allowing-dns-lookups-with-hashicorp-consul-acls-enabled/</link>
+      <pubDate>Thu, 09 Sep 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/posts/allowing-dns-lookups-with-hashicorp-consul-acls-enabled/</guid>
+      <description>I&amp;rsquo;ve recently been experimenting with Hashicorp&amp;rsquo;s Consul in my home infrastructure because I want to use it to provide service discovery and automatic DNS provisioning when I create Proxmox instances with Terraform. Consul is a bit of a hefty beast to get to grips with and getting DNS lookups working when you have ACLs enabled can be a little tricky - it&amp;rsquo;s taken me a day or two of going round in circles to figure this one out.</description>
+    </item>
+    
+    <item>
+      <title>Using BGP to integrate Cilium with OPNsense</title>
+      <link>https://dickingwithdocker.com/posts/using-bgp-to-integrate-cilium-with-opnsense/</link>
+      <pubDate>Mon, 31 May 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/posts/using-bgp-to-integrate-cilium-with-opnsense/</guid>
+      <description>If (like me) you happen to follow the development of the Cilium CNI plugin for Kubernetes then you&amp;rsquo;ll have seen the recent 1.10 release which included many shiny features. One exciting addition is the ability to announce Service IPs via BGP.
+Running Kubernetes in a homelab environment quickly highlights that there are some aspects which are a little lacking when compared to the integration you get from the cloud provider offerings.</description>
+    </item>
+    
+    <item>
+      <title>Securing SSH with the Vault SSH backend and GitHub authentication</title>
+      <link>https://dickingwithdocker.com/posts/securing-ssh-with-the-vault-ssh-backend-and-github-authentication/</link>
+      <pubDate>Sat, 30 May 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/posts/securing-ssh-with-the-vault-ssh-backend-and-github-authentication/</guid>
+      <description>This blog is going to be about using Hashicorp&amp;rsquo;s Vault to issue short-lived certificates to use with SSH. Most guides have you using a username &amp;amp; password to authenticate with Vault, but I&amp;rsquo;ve chosen to delegate that to GitHub instead.
+I&amp;rsquo;m assuming you already have a Vault server running - I won&amp;rsquo;t be covering that in the course of this blog. You&amp;rsquo;ll also need a sufficiently-privileged Vault token, and jq installed on the machine you wish to SSH from.</description>
+    </item>
+    
+    <item>
+      <title>Thanos and Prometheus without Kubernetes</title>
+      <link>https://dickingwithdocker.com/posts/thanos-prometheus-without-kubernetes/</link>
+      <pubDate>Mon, 11 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/posts/thanos-prometheus-without-kubernetes/</guid>
+      <description>Running Thanos without Kubernetes If you&amp;rsquo;ve been around the cloud-native world for a while, you&amp;rsquo;ll no doubt be familiar with (and quite likely already be using) Prometheus. You may however not have heard of Thanos. Put simply, Thanos takes Prometheus and makes it even more awesome.
+In their own words, the high-level description of Thanos is the following:
+Thanos is a set of components that can be composed into a highly available metric system with unlimited storage capacity, which can be added seamlessly on top of existing Prometheus deployments.</description>
+    </item>
+    
+    <item>
+      <title>Terraform S3 remote state with Minio and Docker</title>
+      <link>https://dickingwithdocker.com/posts/terraform-s3-remote-state-with-minio-and-docker/</link>
+      <pubDate>Wed, 27 Feb 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/posts/terraform-s3-remote-state-with-minio-and-docker/</guid>
+      <description>Storing Terraform&amp;rsquo;s remote state in Minio Whilst AWS&amp;rsquo;s free S3 tier is almost certainly sufficient to store Terraform&amp;rsquo;s remote state, it may be the case that you have a requirement to keep the data on-site, or alternatively if you&amp;rsquo;re using Terraform in an air-gapped environment then you have no choice but to self-host.
+Enter Minio. If you&amp;rsquo;ve not used it before, the TLDR is that Minio provides an S3-compatible API in a single binary.</description>
+    </item>
+    
+    <item>
+      <title>Wildcard LetsEncrypt renewal with Ansible and Memset</title>
+      <link>https://dickingwithdocker.com/posts/wildcard-letsencrypt-renewal-with-ansible-and-memset/</link>
+      <pubDate>Tue, 07 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/posts/wildcard-letsencrypt-renewal-with-ansible-and-memset/</guid>
+      <description>Obtaining a wildcard LetsEncrypt cert with Ansible Earlier this year, LetsEncrypt made their wildcard x509 certificates available to the general public. Whilst this is a massive step forward over individual certificates for each domain, it does come with the overhead of having to distribute the wildcard certificate to the (possibly many) places you would use it. Ignoring that issue for now, I wrote a quick Ansible playbook which uses the dns-01 challenge method and my Memset DNS management modules (available in Ansible 2.</description>
+    </item>
+    
+    <item>
+      <title>Ansible module development gotchas</title>
+      <link>https://dickingwithdocker.com/posts/ansible-module-development-gotchas/</link>
+      <pubDate>Wed, 27 Jun 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/posts/ansible-module-development-gotchas/</guid>
+      <description>Lessons I learnt whilst developing modules Having now spent quite some time working on my initial Ansible modules for Memset, I&amp;rsquo;ve assembled some handy hints on areas which tripped me up at various times in my journey.
+It should be noted that this post is written from the point of view of someone who is not a developer and is therefore not as au fait with some of the processes mentioned as others may be.</description>
+    </item>
+    
+    <item>
+      <title>Over-engineering my website with Kubernetes</title>
+      <link>https://dickingwithdocker.com/posts/over-engineering-my-website-kubernetes/</link>
+      <pubDate>Sun, 18 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/posts/over-engineering-my-website-kubernetes/</guid>
+      <description>A solution in need of a problem Like all good sysadmins, my personal website has been a &amp;lsquo;coming soon&amp;rsquo; splash page for quite some time. According to the Wayback Machine, it&amp;rsquo;s been this way since some time in 2014. As I&amp;rsquo;m sure many can sympathise with, there are always far more interesting and shiny things to be experimenting with than building a website.
+One of the interesting things I like to experiment with is Kubernetes (as should be apparent from the tag cloud).</description>
+    </item>
+    
+    <item>
+      <title>Deploying Kubernetes on VMs with Kubespray</title>
+      <link>https://dickingwithdocker.com/posts/deploying-kubernetes-vms-kubespray/</link>
+      <pubDate>Wed, 09 Aug 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/posts/deploying-kubernetes-vms-kubespray/</guid>
+      <description>All the choices So you&amp;rsquo;re looking to start using Kubernetes, but you&amp;rsquo;re overwhelmed by the multitude of deployment options available? Judging by the length of the Picking the Right Solution section to the Kubernetes docs, it&amp;rsquo;s safe to assume that you&amp;rsquo;re not alone. Even after you&amp;rsquo;ve made it past the provisioning stage, you then need to learn how to administrate what is a very complex system. In short; Kubernetes is not easy.</description>
+    </item>
+    
+    <item>
+      <title>Ansible Node Bootstrapping</title>
+      <link>https://dickingwithdocker.com/posts/ansible-node-bootstrapping/</link>
+      <pubDate>Fri, 04 Aug 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/posts/ansible-node-bootstrapping/</guid>
+      <description>When you receive a new server, there are a variety of pre-requisites required before Ansible can be used to administrate the host.
+Below is my own personal playbook which works for both Debian and RedHat (and derivative) systems.
+--- # ansible-playbook bootstrap-ansible-target.yml -b -e &amp;#39;user=user&amp;#39; - hosts: &amp;#34;{{ host }}&amp;#34; remote_user: &amp;#34;{{ user | default(&amp;#39;root&amp;#39;) }}&amp;#34; gather_facts: no pre_tasks: - name: attempt to update apt&amp;#39;s cache raw: test -e /usr/bin/apt-get &amp;amp;&amp;amp; apt-get update ignore_errors: yes - name: attempt to install Python on Debian-based systems raw: test -e /usr/bin/apt-get &amp;amp;&amp;amp; apt-get -y install python-simplejson python ignore_errors: yes - name: attempt to install Python on CentOS-based systems raw: test -e /usr/bin/yum &amp;amp;&amp;amp; yum -y install python-simplejson python ignore_errors: yes - setup: tasks: - name: Create admin user group group: name: admin system: yes state: present - name: Ensure sudo is installed package: name: sudo state: present - name: Create Ansible user user: name: ansible shell: /bin/bash comment: &amp;#34;Ansible management user&amp;#34; home: /home/ansible createhome: yes - name: Add Ansible user to admin group user: name: ansible groups: admin append: yes - name: Add authorized key authorized_key: user: ansible state: present key: &amp;#34;{{ lookup(&amp;#39;file&amp;#39;, &amp;#39;/etc/ansible/.</description>
+    </item>
+    
+    <item>
+      <title>Forcing Kubernetes to use a secondary interface</title>
+      <link>https://dickingwithdocker.com/posts/forcing-kubernetes-to-use-a-secondary-interface/</link>
+      <pubDate>Sun, 20 Nov 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/posts/forcing-kubernetes-to-use-a-secondary-interface/</guid>
+      <description>Following on from my previous post, I discovered rather to my dismay that although I had my nodes initially communicating over the secondary interface, the weave services (and thus my inter-pod traffic) was all going over the public interface.
+As these are VPSes, they have a public IP on eth0 and a VLAN IP on eth1, so it makes sense for all inter-pod traffic to stay internal. If I check the logs for one of the weave-net containers, we can see all comms are going via the 1.</description>
+    </item>
+    
+    <item>
+      <title>Deploying Kubernetes 1.4 on Ubuntu Xenial with Kubeadm</title>
+      <link>https://dickingwithdocker.com/posts/deploying-kubernetes-1-4-on-ubuntu-xenial-with-kubeadm/</link>
+      <pubDate>Thu, 17 Nov 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://dickingwithdocker.com/posts/deploying-kubernetes-1-4-on-ubuntu-xenial-with-kubeadm/</guid>
+      <description>With the 1.4 release of Kubernetes, Google have made instantiating a cluster a whole lot easier. Using Kubeadm, you can bring up a cluster with a single command on each node. A further command will create a DaemonSet which brings up a Weave mesh network between all your nodes.
+As always with complex systems such as Kubernetes, there are some potential pitfalls to be aware of. Firstly, the getting started guide notes that v1.</description>
+    </item>
+    
+  </channel>
+</rss>

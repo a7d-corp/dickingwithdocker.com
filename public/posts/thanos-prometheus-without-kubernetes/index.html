@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Thanos and Prometheus without Kubernetes | Dicking with Docker</title>
+<meta name="keywords" content="">
+<meta name="description" content="Running Thanos without Kubernetes If you&rsquo;ve been around the cloud-native world for a while, you&rsquo;ll no doubt be familiar with (and quite likely already be using) Prometheus. You may however not have heard of Thanos. Put simply, Thanos takes Prometheus and makes it even more awesome.
+In their own words, the high-level description of Thanos is the following:
+Thanos is a set of components that can be composed into a highly available metric system with unlimited storage capacity, which can be added seamlessly on top of existing Prometheus deployments.">
+<meta name="author" content="Simon Weald">
+<link rel="canonical" href="https://dickingwithdocker.com/posts/thanos-prometheus-without-kubernetes/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.9329d037bc79464b26647fb72e079cd738f5d2418b1df4da3b515db9e22cb4d9.css" integrity="sha256-kynQN7x5RksmZH&#43;3Lgec1zj10kGLHfTaO1FdueIstNk=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.f413e19d0714851f6474e7ee9632408e58ac146fbdbe62747134bea2fa3415e0.js" integrity="sha256-9BPhnQcUhR9kdOfuljJAjlisFG&#43;9vmJ0cTS&#43;ovo0FeA="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://dickingwithdocker.com/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://dickingwithdocker.com/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://dickingwithdocker.com/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://dickingwithdocker.com/apple-touch-icon.png">
+<link rel="mask-icon" href="https://dickingwithdocker.com/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="Thanos and Prometheus without Kubernetes" />
+<meta property="og:description" content="Running Thanos without Kubernetes If you&rsquo;ve been around the cloud-native world for a while, you&rsquo;ll no doubt be familiar with (and quite likely already be using) Prometheus. You may however not have heard of Thanos. Put simply, Thanos takes Prometheus and makes it even more awesome.
+In their own words, the high-level description of Thanos is the following:
+Thanos is a set of components that can be composed into a highly available metric system with unlimited storage capacity, which can be added seamlessly on top of existing Prometheus deployments." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://dickingwithdocker.com/posts/thanos-prometheus-without-kubernetes/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2019-03-11T00:00:00+00:00" />
+<meta property="article:modified_time" content="2019-03-11T00:00:00+00:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Thanos and Prometheus without Kubernetes"/>
+<meta name="twitter:description" content="Running Thanos without Kubernetes If you&rsquo;ve been around the cloud-native world for a while, you&rsquo;ll no doubt be familiar with (and quite likely already be using) Prometheus. You may however not have heard of Thanos. Put simply, Thanos takes Prometheus and makes it even more awesome.
+In their own words, the high-level description of Thanos is the following:
+Thanos is a set of components that can be composed into a highly available metric system with unlimited storage capacity, which can be added seamlessly on top of existing Prometheus deployments."/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://dickingwithdocker.com/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Thanos and Prometheus without Kubernetes",
+      "item": "https://dickingwithdocker.com/posts/thanos-prometheus-without-kubernetes/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Thanos and Prometheus without Kubernetes",
+  "name": "Thanos and Prometheus without Kubernetes",
+  "description": "Running Thanos without Kubernetes If you\u0026rsquo;ve been around the cloud-native world for a while, you\u0026rsquo;ll no doubt be familiar with (and quite likely already be using) Prometheus. You may however not have heard of Thanos. Put simply, Thanos takes Prometheus and makes it even more awesome.\nIn their own words, the high-level description of Thanos is the following:\nThanos is a set of components that can be composed into a highly available metric system with unlimited storage capacity, which can be added seamlessly on top of existing Prometheus deployments.",
+  "keywords": [
+    
+  ],
+  "articleBody": "Running Thanos without Kubernetes If you’ve been around the cloud-native world for a while, you’ll no doubt be familiar with (and quite likely already be using) Prometheus. You may however not have heard of Thanos. Put simply, Thanos takes Prometheus and makes it even more awesome.\nIn their own words, the high-level description of Thanos is the following:\nThanos is a set of components that can be composed into a highly available metric system with unlimited storage capacity, which can be added seamlessly on top of existing Prometheus deployments.\nWhat does this solve? When you start increasing the amount of metrics you’re gathering, you soon find that the disk space consumed shoots up. The obvious solution to this is to decrease your retention period in Prometheus, however what if you need to retain a longer time period than you have space for? Enter Thanos.\nWhat does Thanos do? Thanos has three main goals:\nGlobal query view of metrics. Unlimited retention of metrics. High availability of components, including Prometheus. Of these, the ‘unlimited’ metric retention is probably the most eye-catching (it definitely is for me). It should be noted that the ‘unlimited’ retention period is theoretically limited at some point by your storage provider’s own capacity, but if you’re using one of the major players in cloudland then you may as well have unlimited storage.\nThanos achieves the massive retention period by transferring all ingested metrics out to your object storage provider of choice, therefore once Prometheus deletes them they still exist elsewhere. The really clever part comes from the query layer of Thanos - you can query your metrics regardless of whether they’re on disk or in a bucket, and you’ll never know the difference. Thanos presents a Prometheus-compatible API which you set as your Grafana datasource, and the magic just happens under the hood whilst you use Grafana (or any other external dashboard/tool).\nSo what are we doing here? Thanos will work anywhere there’s a Prometheus server, however the usual scenario is to place them on top of Kubernetes. There may, however, be occasions when you really don’t need to use Kubernetes (I know, shocking that I may even suggest this given my love for it!), but the documentation is a little on the sparse side for these circumstances. I’ve pulled out the relevant parts and de-Kubernetes(ed) them in order to run them on a single Docker daemon; the remainder of this article is about my setup and an attempt at explaining it for anyone else who may be interested.\nArchitecture Without duplicating too much of the docs, this is the architecture when the various components are all deployed:\nThere are a lot of components, however we won’t be needing all of them and the complexity is futher reduced as there isn’t any HA involved. The following config examples are going to be Ansible tasks (as that’s my deployment tool of choice), however these should be easy enough to understand if you have a working knowledge of Docker.\nA couple of things to note:\nThe Thanos binary provides the all the relevant components so you only need a single binary (or container). Docker container name resolution does not work on the default network, so I’ve created a separate network for my metrics stack. Sidecar The sidecar process runs alongside the Prometheus server and ships new metrics off to your object storage bucket:\n- name: thanos sidecar docker_container: name: thanos_sidecar image: improbable/thanos:v0.3.2 pull: true state: started restart_policy: unless-stopped command: \"sidecar --prometheus.url=http://prometheus:9090 --tsdb.path=/prometheus --objstore.config-file=/thanos/bucket_config.yml --cluster.disable --grpc-address=0.0.0.0:10901 --http-address=0.0.0.0:19191\" volumes: - /srv/docker/thanos/bucket_config.yml:/thanos/bucket_config.yml - /srv/docker/prometheus/data:/prometheus networks: - name: prometheus The --prometheus-url flag tells the sidecar where to direct queries to for on-disk metrics (see the note above about container name resolution). Thanos needs access to Prometheus’s metrics in order to ship them so I’ve provided that dir as a volume and it’s accessible via the tsdb path. The object storage config file is pretty simple and documented here. --cluster.disable turns off the gossip comms as we’re making this fairly static. The --grpc-address port is used by the query component to access the on-disk metrics via the sidecar (it doesn’t talk to Prometheus directly). Store gateway The store gateway provides a queryable interface to the remotely-stored metrics:\n- name: thanos gateway docker_container: name: thanos_gateway image: improbable/thanos:v0.3.2 pull: true state: started restart_policy: unless-stopped command: \"store --data-dir=/thanos/store --objstore.config-file=/thanos/bucket_config.yml --http-address=0.0.0.0:19191 --grpc-address=0.0.0.0:10901\" volumes: - /srv/docker/thanos/bucket_config.yml:/thanos/bucket_config.yml - /srv/docker/thanos/store:/thanos/store networks: - name: prometheus The --data-dir location is used to cache metrics on disk to improve lookup times. --grpc-address is again provided to the query component to enable metric retrieval from the object storage bucket. Querier The query component provides the interface you’ll talk to from Grafana:\n- name: thanos query docker_container: name: thanos_query image: improbable/thanos:v0.3.2 pull: true state: started restart_policy: unless-stopped command: \"query --http-address 0.0.0.0:19191 --store thanos_sidecar:10901 --store thanos_gateway:10901\" published_ports: - \"{{ hostvars['server.domain.com']['ansible_zt5u46yx73']['ipv4']['address'] }}:19191:19191\" networks: - name: prometheus In a static configuration, the --store flag can be passed multiple times to provide access to the on-disk and bucket-stored metrics. The query component presents a Prometheus-like GUI to allow you to run PromQL commands. Like Prometheus, this interface has NO access control, so don’t expose it externally. I make mine available over a ZeroTier network. Compactor Finally, the compactor will decrease the resolution of the metrics in your object storage bucket:\n- name: thanos compactor docker_container: name: thanos_compactor image: improbable/thanos:v0.3.2 pull: true state: started restart_policy: unless-stopped command: \"compact --data-dir /thanos/compact --objstore.config-file=/thanos/bucket_config.yml --http-address 0.0.0.0:19191 --wait --retention.resolution-raw=14d --retention.resolution-5m=30d --retention.resolution-1h=90d\" volumes: - /srv/docker/thanos/bucket_config.yml:/thanos/bucket_config.yml networks: - name: prometheus The data dir is used to cache metrics whilst the compaction occurs. --wait is important as otherwise the process exits after a run (which doesn’t play well with Docker). The retention resolution options define how long Thanos will retain metrics at that resolution for. Verification With all that in place, if you check the logs of the querier you should see the following:\nlevel=info ts=2019-03-11T22:11:47.356269269Z caller=storeset.go:250 component=storeset msg=\"adding new store to query storeset\" address=thanos_gateway:10901 level=info ts=2019-03-11T22:11:47.356646661Z caller=storeset.go:250 component=storeset msg=\"adding new store to query storeset\" address=thanos_sidecar:10901 This shows that we are able to query both local and remote metrics via the sidecar/gateway components.\nIf we perform a listing on the object storage then we should see files in the bucket:\n$ rclone lsd store:thanos 0 2019-03-12 08:19:31 -1 01D5HQ5G5XKZZFNE72QCFYBXD0 0 2019-03-12 08:19:31 -1 01D5ND0WTKKA4GYSXZ2EBMK6QC 0 2019-03-12 08:19:31 -1 01D5ND162JYNAQQC3H9HP5QC93 0 2019-03-12 08:19:31 -1 01D5P8FPB7KTDCS5ZXHDW1YP41 0 2019-03-12 08:19:31 -1 01D5Q3YKFRKYHYZARZWZ8CDN9N 0 2019-03-12 08:19:31 -1 01D5QXFC6ZK5BJ6DD1JYKQ23TV 0 2019-03-12 08:19:31 -1 01D5QZDG9DBF79ZF1DWATSJCTZ 0 2019-03-12 08:19:31 -1 01D5R4B3F0H83W1B585NP1WAZF 0 2019-03-12 08:19:31 -1 01D5RB6TPZJMJV9VMZC0TAGXVG 0 2019-03-12 08:19:31 -1 debug Success!\nGrafana Lastly, you should be able to point your Grafana datasource to http://thanos_query:19191 and see your new improved metrics stack:\n",
+  "wordCount" : "1106",
+  "inLanguage": "en",
+  "datePublished": "2019-03-11T00:00:00Z",
+  "dateModified": "2019-03-11T00:00:00Z",
+  "author":{
+    "@type": "Person",
+    "name": "Simon Weald"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://dickingwithdocker.com/posts/thanos-prometheus-without-kubernetes/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Dicking with Docker",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://dickingwithdocker.com/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://dickingwithdocker.com/" accesskey="h" title="Dicking with Docker (Alt + H)">Dicking with Docker</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://dickingwithdocker.com/categories/" title="categories">
+                    <span>categories</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://dickingwithdocker.com/tags/" title="tags">
+                    <span>tags</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="https://dickingwithdocker.com/">Home</a>&nbsp;»&nbsp;<a href="https://dickingwithdocker.com/posts/">Posts</a></div>
+    <h1 class="post-title">
+      Thanos and Prometheus without Kubernetes
+    </h1>
+    <div class="post-meta"><span title='2019-03-11 00:00:00 +0000 UTC'>March 11, 2019</span>&nbsp;·&nbsp;6 min&nbsp;·&nbsp;Simon Weald
+
+</div>
+  </header> 
+  <div class="post-content"><h1 id="running-thanos-_without_-kubernetes">Running Thanos <em>without</em> Kubernetes<a hidden class="anchor" aria-hidden="true" href="#running-thanos-_without_-kubernetes">#</a></h1>
+<p>If you&rsquo;ve been around the cloud-native world for a while, you&rsquo;ll no doubt be familiar with (and quite likely already be using) Prometheus. You may however not have heard of <a href="https://github.com/improbable-eng/thanos">Thanos</a>. Put simply, Thanos takes Prometheus and makes it even more awesome.</p>
+<p>In their own words, the high-level description of Thanos is the following:</p>
+<blockquote>
+<p>Thanos is a set of components that can be composed into a highly available metric system with unlimited storage capacity, which can be added seamlessly on top of existing Prometheus deployments.</p>
+</blockquote>
+<h2 id="what-does-this-solve">What does this solve?<a hidden class="anchor" aria-hidden="true" href="#what-does-this-solve">#</a></h2>
+<p>When you start increasing the amount of metrics you&rsquo;re gathering, you soon find that the disk space consumed shoots up. The obvious solution to this is to decrease your retention period in Prometheus, however what if you need to retain a longer time period than you have space for? Enter Thanos.</p>
+<h2 id="what-does-thanos-do">What does Thanos do?<a hidden class="anchor" aria-hidden="true" href="#what-does-thanos-do">#</a></h2>
+<p>Thanos has three main goals:</p>
+<ul>
+<li>Global query view of metrics.</li>
+<li>Unlimited retention of metrics.</li>
+<li>High availability of components, including Prometheus.</li>
+</ul>
+<p>Of these, the &lsquo;unlimited&rsquo; metric retention is probably the most eye-catching (it definitely is for me). It should be noted that the &lsquo;unlimited&rsquo; retention period is theoretically limited <em>at some point</em> by your storage provider&rsquo;s own capacity, but if you&rsquo;re using one of the major players in cloudland then you may as well have unlimited storage.</p>
+<p>Thanos achieves the massive retention period by transferring all ingested metrics out to your object storage provider of choice, therefore once Prometheus deletes them they still exist elsewhere. The really clever part comes from the query layer of Thanos - you can query your metrics regardless of whether they&rsquo;re on disk or in a bucket, and <em>you&rsquo;ll never know the difference</em>. Thanos presents a Prometheus-compatible API which you set as your Grafana datasource, and the magic just happens under the hood whilst you use Grafana (or any other external dashboard/tool).</p>
+<h2 id="so-what-are-we-doing-here">So what are we doing here?<a hidden class="anchor" aria-hidden="true" href="#so-what-are-we-doing-here">#</a></h2>
+<p>Thanos will work anywhere there&rsquo;s a Prometheus server, however the usual scenario is to place them on top of Kubernetes. There may, however, be occasions when you really don&rsquo;t need to use Kubernetes (I know, shocking that I may even suggest this given my love for it!), but the documentation is a little on the sparse side for these circumstances. I&rsquo;ve pulled out the relevant parts and de-Kubernetes(ed) them in order to run them on a single Docker daemon; the remainder of this article is about my setup and an attempt at explaining it for anyone else who may be interested.</p>
+<h2 id="architecture">Architecture<a hidden class="anchor" aria-hidden="true" href="#architecture">#</a></h2>
+<p>Without duplicating too much of the docs, this is the architecture when the various components are all deployed:</p>
+<p><img loading="lazy" src="images/thanos-arch.jpg" alt=""  />
+</p>
+<p>There are a lot of components, however we won&rsquo;t be needing all of them and the complexity is futher reduced as there isn&rsquo;t any HA involved. The following config examples are going to be Ansible tasks (as that&rsquo;s my deployment tool of choice), however these should be easy enough to understand if you have a working knowledge of Docker.</p>
+<p>A couple of things to note:</p>
+<ul>
+<li>The Thanos binary provides the all the relevant components so you only need a single binary (or container).</li>
+<li>Docker container name resolution <em>does not</em> work on the default network, so I&rsquo;ve created a separate network for my metrics stack.</li>
+</ul>
+<h3 id="sidecar">Sidecar<a hidden class="anchor" aria-hidden="true" href="#sidecar">#</a></h3>
+<p>The sidecar process runs alongside the Prometheus server and ships new metrics off to your object storage bucket:</p>
+<pre tabindex="0"><code>- name: thanos sidecar
+  docker_container:
+      name: thanos_sidecar
+      image: improbable/thanos:v0.3.2
+      pull: true
+      state: started
+      restart_policy: unless-stopped
+      command: &#34;sidecar --prometheus.url=http://prometheus:9090 --tsdb.path=/prometheus --objstore.config-file=/thanos/bucket_config.yml --cluster.disable --grpc-address=0.0.0.0:10901 --http-address=0.0.0.0:19191&#34;
+      volumes:
+          - /srv/docker/thanos/bucket_config.yml:/thanos/bucket_config.yml
+          - /srv/docker/prometheus/data:/prometheus
+      networks:
+          - name: prometheus
+</code></pre><ul>
+<li>The <code>--prometheus-url</code> flag tells the sidecar where to direct queries to for on-disk metrics (see the note above about container name resolution).</li>
+<li>Thanos needs access to Prometheus&rsquo;s metrics in order to ship them so I&rsquo;ve provided that dir as a volume and it&rsquo;s accessible via the tsdb path.</li>
+<li>The object storage config file is pretty simple and documented <a href="https://github.com/improbable-eng/thanos/blob/master/docs/storage.md">here</a>.</li>
+<li><code>--cluster.disable</code> turns off the gossip comms as we&rsquo;re making this fairly static.</li>
+<li>The <code>--grpc-address</code> port is used by the query component to access the on-disk metrics via the sidecar (it doesn&rsquo;t talk to Prometheus directly).</li>
+</ul>
+<h3 id="store-gateway">Store gateway<a hidden class="anchor" aria-hidden="true" href="#store-gateway">#</a></h3>
+<p>The store gateway provides a queryable interface to the remotely-stored metrics:</p>
+<pre tabindex="0"><code>- name: thanos gateway
+  docker_container:
+      name: thanos_gateway
+      image: improbable/thanos:v0.3.2
+      pull: true
+      state: started
+      restart_policy: unless-stopped
+      command: &#34;store --data-dir=/thanos/store --objstore.config-file=/thanos/bucket_config.yml --http-address=0.0.0.0:19191 --grpc-address=0.0.0.0:10901&#34;
+      volumes:
+          - /srv/docker/thanos/bucket_config.yml:/thanos/bucket_config.yml
+          - /srv/docker/thanos/store:/thanos/store
+      networks:
+          - name: prometheus
+</code></pre><ul>
+<li>The <code>--data-dir</code> location is used to cache metrics on disk to improve lookup times.</li>
+<li><code>--grpc-address</code> is again provided to the query component to enable metric retrieval from the object storage bucket.</li>
+</ul>
+<h3 id="querier">Querier<a hidden class="anchor" aria-hidden="true" href="#querier">#</a></h3>
+<p>The query component provides the interface you&rsquo;ll talk to from Grafana:</p>
+<pre tabindex="0"><code>- name: thanos query
+  docker_container:
+      name: thanos_query
+      image: improbable/thanos:v0.3.2
+      pull: true
+      state: started
+      restart_policy: unless-stopped
+      command: &#34;query --http-address 0.0.0.0:19191 --store thanos_sidecar:10901 --store thanos_gateway:10901&#34;
+      published_ports:
+          - &#34;{{ hostvars[&#39;server.domain.com&#39;][&#39;ansible_zt5u46yx73&#39;][&#39;ipv4&#39;][&#39;address&#39;] }}:19191:19191&#34;
+      networks:
+          - name: prometheus
+</code></pre><ul>
+<li>In a static configuration, the <code>--store</code> flag can be passed multiple times to provide access to the on-disk and bucket-stored metrics.</li>
+<li>The query component presents a Prometheus-like GUI to allow you to run PromQL commands. Like Prometheus, this interface has <strong>NO</strong> access control, so don&rsquo;t expose it externally. I make mine available over a <a href="http://zerotier.com/">ZeroTier</a> network.</li>
+</ul>
+<h3 id="compactor">Compactor<a hidden class="anchor" aria-hidden="true" href="#compactor">#</a></h3>
+<p>Finally, the compactor will decrease the resolution of the metrics in your object storage bucket:</p>
+<pre tabindex="0"><code>- name: thanos compactor
+  docker_container:
+      name: thanos_compactor
+      image: improbable/thanos:v0.3.2
+      pull: true
+      state: started
+      restart_policy: unless-stopped
+      command: &#34;compact --data-dir /thanos/compact --objstore.config-file=/thanos/bucket_config.yml --http-address 0.0.0.0:19191 --wait --retention.resolution-raw=14d  --retention.resolution-5m=30d --retention.resolution-1h=90d&#34;
+      volumes:
+          - /srv/docker/thanos/bucket_config.yml:/thanos/bucket_config.yml
+      networks:
+          - name: prometheus
+</code></pre><ul>
+<li>The data dir is used to cache metrics whilst the compaction occurs.</li>
+<li><code>--wait</code> is important as otherwise the process exits after a run (which doesn&rsquo;t play well with Docker).</li>
+<li>The retention resolution options define how long Thanos will retain metrics at that resolution for.</li>
+</ul>
+<h3 id="verification">Verification<a hidden class="anchor" aria-hidden="true" href="#verification">#</a></h3>
+<p>With all that in place, if you check the logs of the querier you should see the following:</p>
+<pre tabindex="0"><code>level=info ts=2019-03-11T22:11:47.356269269Z caller=storeset.go:250 component=storeset msg=&#34;adding new store to query storeset&#34; address=thanos_gateway:10901
+level=info ts=2019-03-11T22:11:47.356646661Z caller=storeset.go:250 component=storeset msg=&#34;adding new store to query storeset&#34; address=thanos_sidecar:10901
+</code></pre><p>This shows that we are able to query both local <em>and</em> remote metrics via the sidecar/gateway components.</p>
+<p>If we perform a listing on the object storage then we should see files in the bucket:</p>
+<pre tabindex="0"><code>$ rclone lsd store:thanos
+           0 2019-03-12 08:19:31        -1 01D5HQ5G5XKZZFNE72QCFYBXD0
+           0 2019-03-12 08:19:31        -1 01D5ND0WTKKA4GYSXZ2EBMK6QC
+           0 2019-03-12 08:19:31        -1 01D5ND162JYNAQQC3H9HP5QC93
+           0 2019-03-12 08:19:31        -1 01D5P8FPB7KTDCS5ZXHDW1YP41
+           0 2019-03-12 08:19:31        -1 01D5Q3YKFRKYHYZARZWZ8CDN9N
+           0 2019-03-12 08:19:31        -1 01D5QXFC6ZK5BJ6DD1JYKQ23TV
+           0 2019-03-12 08:19:31        -1 01D5QZDG9DBF79ZF1DWATSJCTZ
+           0 2019-03-12 08:19:31        -1 01D5R4B3F0H83W1B585NP1WAZF
+           0 2019-03-12 08:19:31        -1 01D5RB6TPZJMJV9VMZC0TAGXVG
+           0 2019-03-12 08:19:31        -1 debug
+</code></pre><p><strong>Success!</strong></p>
+<h2 id="grafana">Grafana<a hidden class="anchor" aria-hidden="true" href="#grafana">#</a></h2>
+<p>Lastly, you should be able to point your Grafana datasource to <code>http://thanos_query:19191</code> and see your new improved metrics stack:</p>
+<p><img loading="lazy" src="images/thanos_datasource.png" alt=""  />
+</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="https://dickingwithdocker.com/posts/securing-ssh-with-the-vault-ssh-backend-and-github-authentication/">
+    <span class="title">« Prev</span>
+    <br>
+    <span>Securing SSH with the Vault SSH backend and GitHub authentication</span>
+  </a>
+  <a class="next" href="https://dickingwithdocker.com/posts/terraform-s3-remote-state-with-minio-and-docker/">
+    <span class="title">Next »</span>
+    <br>
+    <span>Terraform S3 remote state with Minio and Docker</span>
+  </a>
+</nav>
+
+
+<ul class="share-buttons">
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Thanos and Prometheus without Kubernetes on x"
+            href="https://x.com/intent/tweet/?text=Thanos%20and%20Prometheus%20without%20Kubernetes&amp;url=https%3a%2f%2fdickingwithdocker.com%2fposts%2fthanos-prometheus-without-kubernetes%2f&amp;hashtags=">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M512 62.554 L 512 449.446 C 512 483.97 483.97 512 449.446 512 L 62.554 512 C 28.03 512 0 483.97 0 449.446 L 0 62.554 C 0 28.03 28.029 0 62.554 0 L 449.446 0 C 483.971 0 512 28.03 512 62.554 Z M 269.951 190.75 L 182.567 75.216 L 56 75.216 L 207.216 272.95 L 63.9 436.783 L 125.266 436.783 L 235.9 310.383 L 332.567 436.783 L 456 436.783 L 298.367 228.367 L 432.367 75.216 L 371.033 75.216 Z M 127.633 110 L 164.101 110 L 383.481 400.065 L 349.5 400.065 Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Thanos and Prometheus without Kubernetes on linkedin"
+            href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fdickingwithdocker.com%2fposts%2fthanos-prometheus-without-kubernetes%2f&amp;title=Thanos%20and%20Prometheus%20without%20Kubernetes&amp;summary=Thanos%20and%20Prometheus%20without%20Kubernetes&amp;source=https%3a%2f%2fdickingwithdocker.com%2fposts%2fthanos-prometheus-without-kubernetes%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Thanos and Prometheus without Kubernetes on reddit"
+            href="https://reddit.com/submit?url=https%3a%2f%2fdickingwithdocker.com%2fposts%2fthanos-prometheus-without-kubernetes%2f&title=Thanos%20and%20Prometheus%20without%20Kubernetes">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-3.446,265.638c0,-22.964 -18.616,-41.58 -41.58,-41.58c-11.211,0 -21.361,4.457 -28.841,11.666c-28.424,-20.508 -67.586,-33.757 -111.204,-35.278l18.941,-89.121l61.884,13.157c0.756,15.734 13.642,28.29 29.56,28.29c16.407,0 29.706,-13.299 29.706,-29.701c0,-16.403 -13.299,-29.702 -29.706,-29.702c-11.666,0 -21.657,6.792 -26.515,16.578l-69.105,-14.69c-1.922,-0.418 -3.939,-0.042 -5.585,1.036c-1.658,1.073 -2.811,2.761 -3.224,4.686l-21.152,99.438c-44.258,1.228 -84.046,14.494 -112.837,35.232c-7.468,-7.164 -17.589,-11.591 -28.757,-11.591c-22.965,0 -41.585,18.616 -41.585,41.58c0,16.896 10.095,31.41 24.568,37.918c-0.639,4.135 -0.99,8.328 -0.99,12.576c0,63.977 74.469,115.836 166.33,115.836c91.861,0 166.334,-51.859 166.334,-115.836c0,-4.218 -0.347,-8.387 -0.977,-12.493c14.564,-6.47 24.735,-21.034 24.735,-38.001Zm-119.474,108.193c-20.27,20.241 -59.115,21.816 -70.534,21.816c-11.428,0 -50.277,-1.575 -70.522,-21.82c-3.007,-3.008 -3.007,-7.882 0,-10.889c3.003,-2.999 7.882,-3.003 10.885,0c12.777,12.781 40.11,17.317 59.637,17.317c19.522,0 46.86,-4.536 59.657,-17.321c3.016,-2.999 7.886,-2.995 10.885,0.008c3.008,3.011 3.003,7.882 -0.008,10.889Zm-5.23,-48.781c-16.373,0 -29.701,-13.324 -29.701,-29.698c0,-16.381 13.328,-29.714 29.701,-29.714c16.378,0 29.706,13.333 29.706,29.714c0,16.374 -13.328,29.698 -29.706,29.698Zm-160.386,-29.702c0,-16.381 13.328,-29.71 29.714,-29.71c16.369,0 29.689,13.329 29.689,29.71c0,16.373 -13.32,29.693 -29.689,29.693c-16.386,0 -29.714,-13.32 -29.714,-29.693Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Thanos and Prometheus without Kubernetes on whatsapp"
+            href="https://api.whatsapp.com/send?text=Thanos%20and%20Prometheus%20without%20Kubernetes%20-%20https%3a%2f%2fdickingwithdocker.com%2fposts%2fthanos-prometheus-without-kubernetes%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-58.673,127.703c-33.842,-33.881 -78.847,-52.548 -126.798,-52.568c-98.799,0 -179.21,80.405 -179.249,179.234c-0.013,31.593 8.241,62.428 23.927,89.612l-25.429,92.884l95.021,-24.925c26.181,14.28 55.659,21.807 85.658,21.816l0.074,0c98.789,0 179.206,-80.413 179.247,-179.243c0.018,-47.895 -18.61,-92.93 -52.451,-126.81Zm-126.797,275.782l-0.06,0c-26.734,-0.01 -52.954,-7.193 -75.828,-20.767l-5.441,-3.229l-56.386,14.792l15.05,-54.977l-3.542,-5.637c-14.913,-23.72 -22.791,-51.136 -22.779,-79.287c0.033,-82.142 66.867,-148.971 149.046,-148.971c39.793,0.014 77.199,15.531 105.329,43.692c28.128,28.16 43.609,65.592 43.594,105.4c-0.034,82.149 -66.866,148.983 -148.983,148.984Zm81.721,-111.581c-4.479,-2.242 -26.499,-13.075 -30.604,-14.571c-4.105,-1.495 -7.091,-2.241 -10.077,2.241c-2.986,4.483 -11.569,14.572 -14.182,17.562c-2.612,2.988 -5.225,3.364 -9.703,1.12c-4.479,-2.241 -18.91,-6.97 -36.017,-22.23c-13.314,-11.876 -22.304,-26.542 -24.916,-31.026c-2.612,-4.484 -0.279,-6.908 1.963,-9.14c2.016,-2.007 4.48,-5.232 6.719,-7.847c2.24,-2.615 2.986,-4.484 4.479,-7.472c1.493,-2.99 0.747,-5.604 -0.374,-7.846c-1.119,-2.241 -10.077,-24.288 -13.809,-33.256c-3.635,-8.733 -7.327,-7.55 -10.077,-7.688c-2.609,-0.13 -5.598,-0.158 -8.583,-0.158c-2.986,0 -7.839,1.121 -11.944,5.604c-4.105,4.484 -15.675,15.32 -15.675,37.364c0,22.046 16.048,43.342 18.287,46.332c2.24,2.99 31.582,48.227 76.511,67.627c10.685,4.615 19.028,7.371 25.533,9.434c10.728,3.41 20.492,2.929 28.209,1.775c8.605,-1.285 26.499,-10.833 30.231,-21.295c3.732,-10.464 3.732,-19.431 2.612,-21.298c-1.119,-1.869 -4.105,-2.99 -8.583,-5.232Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Thanos and Prometheus without Kubernetes on ycombinator"
+            href="https://news.ycombinator.com/submitlink?t=Thanos%20and%20Prometheus%20without%20Kubernetes&u=https%3a%2f%2fdickingwithdocker.com%2fposts%2fthanos-prometheus-without-kubernetes%2f">
+            <svg version="1.1" xml:space="preserve" width="30px" height="30px" viewBox="0 0 512 512" fill="currentColor"
+                xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape">
+                <path
+                    d="M449.446 0C483.971 0 512 28.03 512 62.554L512 449.446C512 483.97 483.97 512 449.446 512L62.554 512C28.03 512 0 483.97 0 449.446L0 62.554C0 28.03 28.029 0 62.554 0L449.446 0ZM183.8767 87.9921H121.8427L230.6673 292.4508V424.0079H281.3328V292.4508L390.1575 87.9921H328.1233L256 238.2489z" />
+            </svg>
+        </a>
+    </li>
+</ul>
+
+  </footer><div id="disqus_thread"></div>
+<script type="application/javascript">
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "dickingwithdocker" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2023 <a href="https://dickingwithdocker.com/">Dicking with Docker</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

@@ -1,0 +1,47 @@
+baseURL: "https://dickingwithdocker.com/"
+title: "Dicking with Docker"
+
+theme: "PaperMod"
+
+params:
+  defaultTheme: auto
+  env: production
+  description: "Eventually consistent"
+  author: Simon Weald
+  ShowShareButtons: true
+  ShowPostNavLinks: true
+  ShowBreadCrumbs: true
+  ShowReadingTime: true
+  ShowCodeCopyButtons: true
+  comments: true
+  ShareButtons: ["linkedin", "twitter", "reddit", "whatsapp", "ycombinator"]
+
+  homeInfoParams:
+    Title: "Howdy 👋"
+    Content: >
+      Sporadic ramblings from the mind of a cloud-native SRE.
+
+  socialIcons:
+    - name: github
+      url: "https://github.com/a7d-corp"
+    - name: instagram
+      url: "https://instagram.com/analbeard"
+    - name: twitter
+      url: "https://twitter.com/glitchcrab"
+    - name: linkedin
+      url: "https://www.linkedin.com/in/simonweald/"
+
+menu:
+  main:
+    - identifier: categories
+      name: categories
+      url: /categories/
+      weight: 10
+    - identifier: tags
+      name: tags
+      url: /tags/
+      weight: 20
+
+services:
+  disqus:
+    shortname: dickingwithdocker

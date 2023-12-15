@@ -1,0 +1,90 @@
+---
+title: "Ansible module development gotchas"
+date: "2018-06-27"
+categories: 
+  - "ansible"
+  - "automation"
+  - "programming"
+  - "python"
+tags: 
+  - "ansible"
+  - "python"
+---
+
+# Lessons I learnt whilst developing modules
+
+Having now spent quite some time working on my initial Ansible modules for [Memset](https://docs.ansible.com/ansible/devel/modules/list_of_cloud_modules.html#memset), I've assembled some handy hints on areas which tripped me up at various times in my journey.
+
+It should be noted that this post is written from the point of view of someone who is not a developer and is therefore not as au fait with some of the processes mentioned as others may be.
+
+### Don't use Requests!
+
+When talking to an API of any sort, my go-to library to do the heavy lifting would obviously be [Requests](http://docs.python-requests.org/en/master/), mostly because it's just so easy to use. When writing Ansible modules, however, this is a bad idea. In order to keep Ansible portable, the use of third party libraries is discouraged (to the point where your modules will [fail CI tests](https://github.com/ansible/ansible/blob/devel/test/sanity/validate-modules/main.py#L66) if you don't adhere).
+
+The Ansible codebase includes a copy of [urllib](https://docs.python.org/2/library/urllib.html) with various improvements to work around urllib's deficiencies. Most important is the [open\_url](https://github.com/ansible/ansible/blob/devel/lib/ansible/module_utils/urls.py#L1124) function, which as the name implies functions much the same as urllib's own [urlopen](https://docs.python.org/2/library/urllib.html#urllib.urlopen) function.
+
+Unfortunately this does mean that you have to tussle with the intricacies and oddities of urllib; it's just something you cannot avoid, so save yourself some work down the line and just use urllib from the beginning.
+
+### Separate common code out into module utils
+
+If you're writing more than a couple of modules, you're almost certainly going to run into some form of code duplication. Fortunately, Ansible has you covered. Shared functions can be placed in `/lib/ansible/module_utils/`, and imported with:
+
+```
+from ansible.module\_utils.mysharedutils import myfunction
+```
+
+### Enforce sensible restrictions
+
+When dealing with APIs written by someone else, it's quite likely that you'll come across some functionality which doesn't quite fit with the idempotent nature of Ansible. For example, Memset's DNS manager allows multiple zones with the same name; the zone is referenced by an ID but as this isn't exposed to the user, the name is the only unique identifier available.
+
+As such, I took the decision to not allow zones managed with Ansible to have the same name. This may cause conflicts with zones created manually by the customer, but I felt it was an acceptable trade-off provided the module documentation stated this and a clear error was returned by the module. In an ideal world you would only be using Ansible to manage the zones and therefore won't need to create potential conflicts by hand-crafting entries.
+
+### Run CI tests locally
+
+Once you've opened your first PR, your code will be subjected to a battery of CI tests and it'll save a lot of time if you know ahead of time that nothing will be flagged up. As you will already have a local checkout of the Ansible repo, it makes running Ansible [from a checkout](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#running-from-source) (and all the associated tooling) quite simple.
+
+Once you've sourced the `env-setup` script, you can run all or some of the tests against your code:
+
+```
+ansible-test sanity --docker default lib/ansible/modules/cloud/memset/
+```
+
+It's advisable to run the tests against just your own code by providing the path (you can specify individual files too) - if you don't then the tests take quite some time and you'll be needlessly testing every piece of code in the repo.
+
+### Write integration tests
+
+It's worthwhile writing integration tests alongside the module itself as you can be comfortable that your module will behave as it should. Alternatively, if you follow a test-driven philosophy then you'll have written the tests before you even touch the code. Using the special [assert](https://docs.ansible.com/ansible/latest/modules/assert_module.html) module, you can check that the outcome of the previous task is what you expect:
+
+```
+\- name: test creating zone
+  local\_action:
+    module: memset\_zone
+    api\_key: "{{ api\_key }}"
+    state: present
+    name: "{{ zone\_name }}"
+    ttl: 300
+  check\_mode: true
+  register: result
+
+- name: check if the zone would be created
+  assert:
+    that:
+      - result is changed
+      - result is successful
+```
+
+Just don't forget to set `ignore_errors: true` on a task which you expect to fail; the integration tests are just standard playbooks so they'll report the run as a failure even though you intended it to happen.
+
+### Don't rely solely on the docs
+
+Whilst the Ansible docs are quite extensive, they can only really be a broad overview due to the complexities involved. Fortunately, there are a lot of useful helper functions available to make your life (and modules) a bit simpler - you just have to dig through the codebase a little to find them.
+
+The majority are found in [basic.py](https://github.com/ansible/ansible/blob/devel/lib/ansible/module_utils/basic.py) and can be imported as and when you need them.
+
+I learnt a lot from reading other people's modules; don't be afraid to lift ideas as there's no point re-inventing the wheel (unless you can improve on it!).
+
+### Do use the IRC channels
+
+If you're new to contributing to large opensource projects, the bar for entry can seem very high/daunting. I'd strongly recommend joining the `#ansible-devel` channel on IRC; there are lots of helpful people there who are more than happy to point you in the right direction if you have questions which aren't covered in the docs. Special thanks to Gundalow who helped me out a lot when I was finding my feet.
+
+Don't forget that they're just people who were in the same position at some point!
