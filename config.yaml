@@ -19,9 +19,11 @@ params:
   homeInfoParams:
     Title: "Howdy 👋"
     Content: >
-      Sporadic ramblings from the mind of a cloud-native SRE.
+      I'm Simon; an SRE by day, and quite often by night too. I'm fascinated by technology, cars and photography (although not necessarily in that order). 
 
   socialIcons:
+    - name: github
+      url: "https://github.com/glitchcrab"
     - name: github
       url: "https://github.com/a7d-corp"
     - name: instagram
