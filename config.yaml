@@ -1,7 +1,7 @@
 baseURL: "https://dickingwithdocker.com/"
 title: "Dicking with Docker"
 
-theme: "PaperMod"
+theme: ["PaperMod", "plausible-hugo"]
 
 params:
   defaultTheme: auto
@@ -15,12 +15,10 @@ params:
   ShowCodeCopyButtons: true
   comments: true
   ShareButtons: ["linkedin", "twitter", "reddit", "whatsapp", "ycombinator"]
-
   homeInfoParams:
     Title: "Howdy 👋"
     Content: >
       I'm Simon; an SRE by day, and quite often by night too. I'm fascinated by technology, cars and photography (although not necessarily in that order). 
-
   socialIcons:
     - name: github
       url: "https://github.com/glitchcrab"
@@ -32,6 +30,11 @@ params:
       url: "https://twitter.com/glitchcrab"
     - name: linkedin
       url: "https://www.linkedin.com/in/simonweald/"
+  plausible:
+    enable: true
+    domain: "dickingwithdocker.com"
+    gitstar: false
+    selfhosted_domain: "analytics.a7d.dev"
 
 menu:
   main:
