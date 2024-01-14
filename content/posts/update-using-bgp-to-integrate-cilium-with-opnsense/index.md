@@ -7,11 +7,13 @@ categories:
   - "networking"
   - "bgp"
 tags:
+  - "bgp"
   - "containers"
+  - "cilium"
+  - "cni"
+  - "homelab"
   - "kubernetes"
   - "networking"
-  - "homelab"
-  - "bgp"
 ---
 
 A little while back, I wrote a [short piece on integrating Cilium with OPNsense using BGP](/posts/using-bgp-to-integrate-cilium-with-opnsense/). With more recent releases of Cilium, the team have introduced the [Cilium BGP Control Plane](https://docs.cilium.io/en/stable/network/bgp-control-plane/) (currently as a beta feature). This reworking of the BGP integration replaces the old MetalLB-based control plane and as such the older feature must first be disabled. To enable the new feature, you can either pass an argument to Cilium:
