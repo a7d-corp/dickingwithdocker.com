@@ -5,6 +5,8 @@ categories:
   - "uncategorised"
 ---
 
+**Update**: Cilium now has a new BGP integration so things have changed a little; see [this post](/posts/update-using-bgp-to-integrate-cilium-with-opnsense/) for more details.
+
 If (like me) you happen to follow the development of the [Cilium](https://cilium.io) CNI plugin for Kubernetes then you'll have seen the recent `1.10` release which included _many_ shiny features. One exciting addition is the ability to announce Service IPs via BGP.
 
 Running Kubernetes in a homelab environment quickly highlights that there are some aspects which are a little lacking when compared to the integration you get from the cloud provider offerings. One of the biggest limitations is the inability to create `Loadbalancer` services to expose ingress controllers and the like. [MetalLB](https://metallb.universe.tf/) has been around for some years now and its aim is to improve this situation by using either ARP or BGP to announce routes to Service IPs inside your cluster(s). This means that you can create `Loadbalancer` Services inside your on-prem (or homelab) network, and it goes a long way towards reducing the friction of running Kubernetes outside of the cloud providers.
