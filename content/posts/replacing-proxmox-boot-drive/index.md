@@ -1,5 +1,5 @@
 ---
-title: "Replacing the boot drive in a single drive Proxmox node"
+title: "Replacing the drive in a single drive Proxmox node"
 date: "2024-01-14"
 description: "A (non-exhaustive) guide to replacing the boot drive in a Proxmox node"
 categories:
@@ -11,7 +11,7 @@ tags:
   - "sysadmin"
 ---
 
-Recently, I started getting the dreaded emails from `smartd` on one of my Proxmox nodes. The drive was (slowly) failing and needed to be replaced. Unfortunately due to my nodes being [micro form-factor(MFF](https://www.dell.com/support/kbdoc/en-uk/000125345/optiplex-3070-visual-guide-to-your-computers#MFF_Front), they only have a single drive. This means that I would also need to migrate the VM disks to the new drive too. As this is a homelab setup, I don't have a ton of capacity or any fancy storage solutions, so I would need to get a little creative and replace the drive in-situ.
+Recently, I started getting the dreaded emails from `smartd` on one of my Proxmox nodes. The drive was (slowly) failing and needed to be replaced. Unfortunately due to my nodes being [micro form-factor(MFF)](https://www.dell.com/support/kbdoc/en-uk/000125345/optiplex-3070-visual-guide-to-your-computers#MFF_Front), they only have a single drive. This means that I would also need to migrate the VM disks to the new drive too. As this is a homelab setup, I don't have a ton of capacity or any fancy storage solutions, so I would need to get a little creative and replace the drive in-situ.
 
 The 'official' method here would be to back everything up to Proxmox Backup Server, install a fresh copy of Proxmox onto the new drive and then restore from the backups, however setting up the backup server is something which has been on my todo list for a while (yes, I know).
 
@@ -199,7 +199,7 @@ proxmox-boot-tool format /dev/sda2
 And then initialise the partition (omit `grub` if you are using `systemd-boot`):
 
 ```shell
-proxmox-boot-tool init /dev/nvme0n1p2 grub
+proxmox-boot-tool init /dev/sda2 grub
 ```
 
 Finally, populate the ESP partition:
