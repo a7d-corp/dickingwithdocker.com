@@ -1,6 +1,6 @@
 ---
 title: "Replacing the drive in a single drive Proxmox node"
-date: "2024-01-14"
+date: "2024-08-17"
 description: "A (non-exhaustive) guide to replacing the boot drive in a Proxmox node"
 categories:
   - "homelab"
