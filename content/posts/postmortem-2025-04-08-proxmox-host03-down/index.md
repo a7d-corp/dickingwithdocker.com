@@ -11,9 +11,12 @@ tags:
   - "homelab"
   - "sysadmin"
   - "networking"
+  - "postmortem"
 ---
 
-# Postmortem: Proxmox host-03 goes offline twice.
+A postmortem into why a node in my Proxmox cluster went offline twice within a few days.
+
+# Postmortem: Proxmox host-03 goes offline twice
 
 ## Issue summary
 
