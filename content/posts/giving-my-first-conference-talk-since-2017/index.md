@@ -10,7 +10,7 @@ tags:
   - "conferences"
 ---
 
-Last week I found myself on stage at [ContainerDays Hamburg](https://www.containerdays.io/), giving a talk I hadn’t exactly planned for. My colleague unfortunately had to drop out at short notice, and with just over a week to prepare, I stepped in alongside a coworker to deliver a joint talk on **Kubernetes at the edge with [KubeEdge](https://kubeedge.io/)**.
+Last week I found myself on stage at [ContainerDays Hamburg](https://www.containerdays.io/containerdays-conference-2025/), giving a talk I hadn’t exactly planned for. My colleague unfortunately had to drop out at short notice, and with just over a week to prepare, I stepped in alongside a coworker to deliver a joint talk on **Kubernetes at the edge with [KubeEdge](https://kubeedge.io/)**.
 
 The pitch: show how KubeEdge makes running workloads at the edge 'easy', complete with a Raspberry Pi demo live on stage. The reality: demos are cruel. Despite endless rehearsals, the Pi decided to do its own thing when it mattered most.
 
