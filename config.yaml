@@ -3,6 +3,8 @@ title: "Dicking with Docker"
 
 theme: ["PaperMod", "plausible-hugo"]
 
+enableGitInfo: true
+
 params:
   defaultTheme: auto
   env: production
