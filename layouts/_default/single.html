@@ -43,7 +43,7 @@
   {{- end }}
 
   <footer class="post-footer">
-    Last updated on {{ .Lastmod.Format "January 2, 2006" }}: {{ .GitInfo.Subject }} ({{ .GitInfo.AbbreviatedHash }})
+    <small>Last updated {{ .Lastmod.Format "2 Jan 2006" }}: <a style="text-decoration:underline;" href="https://github.com/a7d-corp/dickingwithdocker.com/commit/{{ .GitInfo.Hash }}">{{ .GitInfo.Subject }} ({{ .GitInfo.AbbreviatedHash }})</a></small>
     <br />
     {{- $tags := .Language.Params.Taxonomies.tag | default "tags" }}
     <ul class="post-tags">
