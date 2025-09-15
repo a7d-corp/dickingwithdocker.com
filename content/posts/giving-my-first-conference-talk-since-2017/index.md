@@ -22,7 +22,7 @@ My key takeaways:
 * Always assume the demo will fail. Make sure you build the story so it still works without it.
 * Hamburg has a strong cloud-native crowd. The reception was great, even when the Pi wasn’t cooperating.
 * This was good prep for (what was supposed to be) my first talk at [Cloud Native Bergen](https://2025.cloudnativebergen.dev/) in October (I'll be talking about Cluster API this time).
-=-
+
 Would I do it again? Absolutely. Next time, though, I'll have a recording of the demo, _just in case_.
 
 (I'll update this post when the recording is available.)
