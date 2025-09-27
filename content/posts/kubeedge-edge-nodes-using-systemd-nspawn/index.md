@@ -22,7 +22,7 @@ In order to test KubeEdge, I need edge nodes. However, I don't have any hardware
 
 ## Creating a container
 
-I wanted to be able to create new containers quickly, so I wrote a small script to do this. I also wanted to be able to test different Linux distributions, so I made the script flexible enough to allow for it - currently, it supports Arch Linux and Ubuntu. It works by using either `pacstrap` (for Arch) or `debootstrap` (for Ubuntu) to create a minimal filesystem for the container, and then configures it with a few basic settings required to run the [edgecore components](https://kubeedge.io/docs/category/edge-components) (the edge part of KubeEdge). This base directory can then be cloned to a new directory and a conainer booted from it.
+I wanted to be able to create new containers quickly, so I wrote a small script to do this. I also wanted to be able to test different Linux distributions, so I made the script flexible enough to allow for it - currently, it supports Arch Linux and Ubuntu. It works by using either `pacstrap` (for Arch) or `debootstrap` (for Ubuntu) to create a minimal filesystem for the container, and then configures it with a few basic settings required to run the [edgecore components](https://kubeedge.io/docs/category/edge-components) (the edge part of KubeEdge). This base directory can then be cloned to a new directory and a container booted from it.
 
 The script can also facilitate joining the new edge node to an existing KubeEdge cluster (assuming your current Kubeconfig is configured correctly).
 
