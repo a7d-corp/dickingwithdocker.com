@@ -28,7 +28,7 @@ The script can also facilitate joining the new edge node to an existing KubeEdge
 
 First we use the script to build the source image:
 
-````bash
+```bash
 ./build-container.sh --os arch --op prepare
 ```
 
@@ -45,7 +45,7 @@ This is the script:
 
 Some points to note:
 
-- [`keadm`](https://kubeedge.io/docs/setup/install-with-keadm/) must be installed on the host system for the `join` operation to work.
+- [keadm](https://kubeedge.io/docs/setup/install-with-keadm/) must be installed on the host system for the `join` operation to work.
 
 ## Security considerations
 
