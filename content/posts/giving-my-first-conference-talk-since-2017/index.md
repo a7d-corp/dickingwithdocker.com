@@ -25,4 +25,6 @@ My key takeaways:
 
 Would I do it again? Absolutely. Next time, though, I'll have a recording of the demo, _just in case_.
 
-(I'll update this post when the recording is available.)
+Here’s the recording of our talk:
+
+{{< youtube id=sk5GZeE23w4 >}}
